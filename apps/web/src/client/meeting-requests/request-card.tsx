@@ -101,9 +101,11 @@ export function RequestCard({
       </p>
 
       {request.location && <p className="text-xs text-text-secondary">{request.location}</p>}
-      {request.message && <p className="text-sm text-text-secondary">"{request.message}"</p>}
+      {request.message && (
+        <p className="text-sm text-text-secondary">&quot;{request.message}&quot;</p>
+      )}
       {request.status === "DECLINED" && request.declineMessage && (
-        <p className="text-sm text-text-secondary">Motivo: "{request.declineMessage}"</p>
+        <p className="text-sm text-text-secondary">Motivo: &quot;{request.declineMessage}&quot;</p>
       )}
 
       {canRespond && ownAvailability && (

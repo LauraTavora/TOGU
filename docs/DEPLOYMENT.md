@@ -12,6 +12,8 @@ Production
 
 Cada PR gera Preview automático (Vercel); Production só recebe deploy após pipeline de CI completo (`TESTING.md`) aprovado.
 
+**Status real:** o pipeline de CI (GitHub Actions, `.github/workflows/ci.yml` — typecheck, lint, testes, build em todo push/PR para `main`) existe desde `ADR-021`. O projeto **ainda não está conectado a nenhum ambiente Vercel** — não há Preview automático nem deploy de Production configurado; isso é o próximo passo antes do primeiro deploy real, não algo já em funcionamento.
+
 ## Banco de dados
 - Desenvolvimento: PostgreSQL local.
 - Produção: **Neon PostgreSQL** (obrigatório).
