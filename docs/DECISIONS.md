@@ -13,5 +13,6 @@
 | [ADR-007](adr/ADR-007-meeting-negotiation-and-concurrency.md) | Negociação de encontros e proteção contra condição de corrida | Aceito |
 | [ADR-008](adr/ADR-008-priority-engine.md) | Priority Engine | Aceito |
 | [ADR-009](adr/ADR-009-outbox-implementation.md) | Implementação prática do Transactional Outbox | Aceito |
+| [ADR-010](adr/ADR-010-discovery-module.md) | Módulo Discovery (Explore) | Aceito |
 
 Novas ADRs devem seguir o padrão `ADR-XXX-titulo-curto.md` com seções: Status, Contexto, Decisão, Consequências.

@@ -67,6 +67,18 @@ DELETE /api/v1/circles/:id/members/:userId
 ```
 Círculos pertencem ao workspace pessoal do criador. Apenas quem gerencia o workspace (`OWNER`/`ADMIN`) pode renomear, excluir ou gerenciar membros; membros do próprio círculo também podem visualizar a lista de membros.
 
+### Explore / Descoberta (módulo `discovery`)
+```text
+GET    /api/v1/discovery/events?latitude=&longitude=&radiusKm=&from=&to=&category=&onlyFree=
+POST   /api/v1/discovery/events/:id/save
+DELETE /api/v1/discovery/events/:id/save
+GET    /api/v1/discovery/saved-events
+POST   /api/v1/discovery/events/:id/add-to-agenda
+GET    /api/v1/discovery/events/:id/circle-interest
+POST   /api/v1/internal/sync-nearby-events   (rota interna, protegida por segredo X-Internal-Secret)
+```
+`EventDiscoveryProvider` desacopla o catálogo local de qualquer provedor externo específico (hoje um mock — ver `ADR-010`); a busca sempre lê do catálogo local (`NearbyEvent`), nunca do provedor diretamente. `circle-interest` retorna apenas uma contagem, nunca os nomes de quem também salvou o evento. Para convidar alguém para um evento descoberto, usar `POST /api/v1/meeting-requests` normalmente com os dados do evento.
+
 ### Eventos (módulo `scheduling`)
 ```text
 POST /api/v1/events

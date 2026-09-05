@@ -571,13 +571,17 @@ model NearbyEvent {
   title        String
   category     String
   startAt      DateTime
+  endAt        DateTime?
+  locationName String?
   latitude     Float
   longitude    Float
   priceInfo    String?
+  isFree       Boolean  @default(false)
   createdAt    DateTime @default(now())
 
   savedBy SavedEvent[]
 
+  @@index([startAt])
   @@map("nearby_events")
 }
 
