@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { PATCH, DELETE } from "./route";
 
 describe("Rotas /api/v1/circles/:id — sem autenticação", () => {
-  const params = { params: { id: "some-id" } };
+  const params = { params: Promise.resolve({ id: "some-id" }) };
 
   it("PATCH rejeita sem login", async () => {
     const response = await PATCH(

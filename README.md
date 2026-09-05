@@ -62,7 +62,10 @@ apps/
   web/               # Next.js
   mobile/            # React Native + Expo
 packages/
-  design-system/     # tokens, componentes, primitives
+  design-system/     # tokens + componentes React
+  sdk/               # cliente HTTP tipado (web hoje, mobile depois)
+  schemas/           # validação runtime compartilhada (Zod)
+  database/          # schema Prisma + client compartilhado
 docs/
   adr/               # Architecture Decision Records
   PRODUCT.md, ARCHITECTURE.md, DATABASE.md, API.md, SECURITY.md,

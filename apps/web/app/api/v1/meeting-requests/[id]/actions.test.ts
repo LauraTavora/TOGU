@@ -4,7 +4,7 @@ import { POST as decline } from "./decline/route";
 import { POST as counterProposal } from "./counter-proposal/route";
 import { POST as cancel } from "./cancel/route";
 
-const params = { params: { id: "some-id" } };
+const params = { params: Promise.resolve({ id: "some-id" }) };
 
 function jsonRequest(path: string, body: unknown = {}): Request {
   return new Request(`http://localhost${path}`, {

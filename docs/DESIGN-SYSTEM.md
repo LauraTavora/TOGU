@@ -18,7 +18,7 @@ text-primary       #17181C
 text-secondary     #71717A
 ```
 
-Modos: Light Mode e Dark Mode (com tokens equivalentes semânticos, ex.: `background`/`surface` invertidos), preparado para temas customizados futuros.
+Modos: Light Mode e Dark Mode (com tokens equivalentes semânticos, ex.: `background`/`surface` invertidos), preparado para temas customizados futuros. Implementado via CSS variables em `apps/web/app/globals.css` (light por padrão, dark via `prefers-color-scheme` e via classe `.dark` para alternância manual futura) — ver `ADR-013`.
 
 ## Fundamentos visuais
 - Fundo claro, superfícies brancas/levemente acinzentadas, contraste alto.
@@ -26,24 +26,24 @@ Modos: Light Mode e Dark Mode (com tokens equivalentes semânticos, ex.: `backgr
 - Bastante espaço em branco, tipografia moderna, ícones simples.
 - Microinterações e animações naturais (nunca exageradas).
 
-## Estrutura do pacote
+## Estrutura do pacote (estado atual)
 ```text
-tokens/       (cor, espaçamento, radius, sombra, tipografia)
-typography/
-spacing/
-radius/
-shadows/
+tokens/
+  colors.ts     (light/dark, exporta também as triplas RGB usadas em globals.css)
+  spacing.ts    (spacing, radius, shadow)
+lib/
+  cn.ts         (combinador de classes minimalista)
 components/
-  button/
-  input/
-  card/
-  badge/
-  avatar/
-  dialog/
-  bottom-sheet/
-  calendar-primitives/
-  status-indicator/
+  button.tsx           (variantes primary/secondary/ghost/danger)
+  input.tsx             (label + hint + erro, acessível via aria-describedby)
+  card.tsx
+  badge.tsx
+  avatar.tsx            (iniciais como fallback)
+  status-indicator.tsx  (ver seção seguinte)
+  empty-state.tsx
+  skeleton.tsx
 ```
+Ainda não implementados (pendentes de UI futura): `dialog`, `bottom-sheet`, `calendar-primitives`.
 
 ## Componentes de status (padronizados)
 ```text

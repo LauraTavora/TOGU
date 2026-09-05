@@ -6,7 +6,7 @@ function bareRequest(method: string): Request {
 }
 
 describe("Rotas de evento por id — sem autenticação", () => {
-  const params = { params: { id: "some-id" } };
+  const params = { params: Promise.resolve({ id: "some-id" }) };
 
   it("GET rejeita sem login", async () => {
     const response = await GET(bareRequest("GET"), params);

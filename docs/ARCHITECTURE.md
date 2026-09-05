@@ -94,10 +94,10 @@ apps/
   web/       # Next.js (App Router) — TypeScript, Tailwind
   mobile/    # React Native + Expo — TypeScript
 packages/
-  design-system/   # tokens, componentes, primitives
-  domain/           # (opcional) núcleo de domínio compartilhável entre apps se aplicável
-  sdk/              # cliente HTTP tipado consumido por web e mobile
-  schemas/          # validação runtime compartilhada (ex.: Zod)
+  design-system/   # tokens + componentes React (button, input, card, badge, avatar, status-indicator, empty-state, skeleton)
+  sdk/              # cliente HTTP tipado (createHttpClient, createAuthApi), sem estado — consumido por web e futuramente mobile
+  schemas/          # validação runtime compartilhada (Zod)
+  database/         # schema Prisma + client compartilhado
 docs/
   adr/
 ```
