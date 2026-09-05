@@ -3,12 +3,20 @@ import { searchNearbyEventsQuerySchema } from "@togu/schemas";
 import { createSearchNearbyEventsUseCase } from "@/modules/discovery";
 import { requireAuth } from "@/shared/auth/require-auth";
 import { apiError } from "@/shared/http/api-error";
+import { enforceRateLimit } from "@/shared/rate-limit";
 
 export async function GET(request: Request) {
   const auth = await requireAuth(request);
   if (!auth) {
     return apiError(401, "unauthorized", "Autenticação necessária.");
   }
+
+  const rateLimited = await enforceRateLimit(auth.userId, {
+    bucket: "discovery:search",
+    limit: 60,
+    windowMs: 60 * 1000,
+  });
+  if (rateLimited) return rateLimited;
 
   const url = new URL(request.url);
   const parsed = searchNearbyEventsQuerySchema.safeParse({

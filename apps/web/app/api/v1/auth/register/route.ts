@@ -7,8 +7,16 @@ import {
   InvalidEmailError,
 } from "@/modules/identity";
 import { apiError } from "@/shared/http/api-error";
+import { enforceRateLimit, getClientIp } from "@/shared/rate-limit";
 
 export async function POST(request: Request) {
+  const rateLimited = await enforceRateLimit(getClientIp(request), {
+    bucket: "auth:register",
+    limit: 5,
+    windowMs: 15 * 60 * 1000,
+  });
+  if (rateLimited) return rateLimited;
+
   const body = await request.json().catch(() => null);
   const parsed = registerRequestSchema.safeParse(body);
   if (!parsed.success) {

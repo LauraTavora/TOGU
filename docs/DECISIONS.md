@@ -14,5 +14,6 @@
 | [ADR-008](adr/ADR-008-priority-engine.md) | Priority Engine | Aceito |
 | [ADR-009](adr/ADR-009-outbox-implementation.md) | Implementação prática do Transactional Outbox | Aceito |
 | [ADR-010](adr/ADR-010-discovery-module.md) | Módulo Discovery (Explore) | Aceito |
+| [ADR-011](adr/ADR-011-rate-limiting.md) | Rate limiting | Aceito |
 
 Novas ADRs devem seguir o padrão `ADR-XXX-titulo-curto.md` com seções: Status, Contexto, Decisão, Consequências.

@@ -7,12 +7,20 @@ import {
 } from "@/modules/scheduling";
 import { requireAuth } from "@/shared/auth/require-auth";
 import { apiError } from "@/shared/http/api-error";
+import { enforceRateLimit } from "@/shared/rate-limit";
 
 export async function POST(request: Request) {
   const auth = await requireAuth(request);
   if (!auth) {
     return apiError(401, "unauthorized", "Autenticação necessária.");
   }
+
+  const rateLimited = await enforceRateLimit(auth.userId, {
+    bucket: "events:create",
+    limit: 30,
+    windowMs: 60 * 1000,
+  });
+  if (rateLimited) return rateLimited;
 
   const body = await request.json().catch(() => null);
   const parsed = createEventRequestSchema.safeParse(body);
