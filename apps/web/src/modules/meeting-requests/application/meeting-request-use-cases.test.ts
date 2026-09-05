@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { CreateMeetingRequestUseCase } from "./create-meeting-request.use-case";
 import { AcceptMeetingRequestUseCase } from "./accept-meeting-request.use-case";
 import { DeclineMeetingRequestUseCase } from "./decline-meeting-request.use-case";

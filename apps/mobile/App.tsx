@@ -1,6 +1,10 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import { lightColors } from "@togu/design-system";
+// Import direto do módulo de tokens (não do barrel `@togu/design-system`):
+// os componentes do barrel são elementos DOM (<div>, <button>...) e não
+// rodam em React Native, além de arrastarem os tipos de @types/react do
+// web (v19) para o typecheck do mobile (v18), quebrando a compilação.
+import { lightColors } from "@togu/design-system/src/tokens/colors";
 
 export default function App() {
   return (
