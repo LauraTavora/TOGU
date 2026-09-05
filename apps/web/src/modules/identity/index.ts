@@ -7,6 +7,7 @@ export {
   createRequestPasswordResetUseCase,
   createResetPasswordUseCase,
   createGetUsersPublicInfoUseCase,
+  createFindUserByEmailUseCase,
 } from "./infrastructure/container";
 export type { UserPublicInfo } from "./application/get-users-public-info.use-case";
 

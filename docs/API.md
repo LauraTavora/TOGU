@@ -39,8 +39,9 @@ Somente quem não apresentou a proposta de horário em aberto (o requester na pr
 ### Identidade pública (módulo `identity`)
 ```text
 GET /api/v1/users?ids=id1,id2,id3
+GET /api/v1/users?email=alguem@example.com
 ```
-Resolve `{id, email}` para até 50 ids de uma vez — usado por telas que só têm ids de outros usuários (ex.: Central de Solicitações) e precisam mostrar "quem é" alguém. Nunca expõe `passwordHash` ou qualquer outro campo. Ainda não existe `Profile` (nome de exibição, foto); o e-mail é usado como identificador visível temporário — ver `ADR-016`.
+`ids` resolve `{id, email}` para até 50 ids de uma vez — usado por telas que só têm ids de outros usuários (ex.: Central de Solicitações) e precisam mostrar "quem é" alguém. `email` resolve um único e-mail para `{ user: {id, email} | null }` — `null` quando ninguém tem esse e-mail (nunca `404`, para não ajudar enumeração); usado para resolver e-mail digitado em id antes de ações como adicionar membro a um círculo (ver `ADR-017`). Nenhum dos dois modos expõe `passwordHash` ou qualquer outro campo. Ainda não existe `Profile` (nome de exibição, foto); o e-mail é usado como identificador visível temporário — ver `ADR-016`.
 
 ### Notificações (módulo `notifications`)
 ```text
