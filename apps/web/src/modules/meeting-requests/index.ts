@@ -17,4 +17,5 @@ export {
 export { MeetingRequestNotOpenError, NotAResponderError, NotAPartyError } from "./domain/negotiation";
 export { InvalidTimeRangeError } from "./domain/time-range";
 export type { MeetingRequest, MeetingRequestStatus } from "./domain/meeting-request";
+export type { ReceivedSortMode } from "./application/list-meeting-requests.use-case";
 export type { CounterProposal } from "./domain/counter-proposal";

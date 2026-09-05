@@ -18,6 +18,7 @@ export async function GET(request: Request) {
   const parsed = listMeetingRequestsQuerySchema.safeParse({
     box: url.searchParams.get("box"),
     status: url.searchParams.get("status") ?? undefined,
+    sort: url.searchParams.get("sort") ?? undefined,
   });
   if (!parsed.success) {
     return apiError(400, "invalid_input", parsed.error.message);
@@ -25,7 +26,11 @@ export async function GET(request: Request) {
 
   const meetingRequests =
     parsed.data.box === "received"
-      ? await createListReceivedMeetingRequestsUseCase().execute(auth.userId, parsed.data.status)
+      ? await createListReceivedMeetingRequestsUseCase().execute(
+          auth.userId,
+          parsed.data.status,
+          parsed.data.sort,
+        )
       : await createListSentMeetingRequestsUseCase().execute(auth.userId, parsed.data.status);
 
   return NextResponse.json({ meetingRequests });
