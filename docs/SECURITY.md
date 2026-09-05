@@ -40,7 +40,7 @@ TLS obrigatório, usuário de menor privilégio, credenciais por ambiente, backu
 - Senhas com algoritmo consolidado (ex.: argon2/bcrypt) — nunca criptografia própria.
 
 ## Auditoria
-Eventos registrados: `LOGIN`, `PASSWORD_CHANGED`, `CALENDAR_CONNECTED`, `EVENT_CREATED`, `EVENT_UPDATED`, `EVENT_DELETED`, `REQUEST_ACCEPTED`, `REQUEST_REJECTED`, `PERMISSION_CHANGED`, `ACCOUNT_DELETED`. Nunca registrar senhas, tokens ou dados sensíveis em log.
+Implementado (`shared/audit`, best-effort — nunca bloqueia a ação principal) e conectado a `LOGIN`, `PASSWORD_CHANGED`, `EVENT_CREATED`, `EVENT_UPDATED`, `EVENT_DELETED`, `REQUEST_ACCEPTED`, `REQUEST_REJECTED`. `CALENDAR_CONNECTED`, `PERMISSION_CHANGED` e `ACCOUNT_DELETED` aguardam os módulos correspondentes existirem (ver `ADR-012`). Nunca registrar senhas, tokens ou dados sensíveis em log.
 
 ## Observabilidade
 Logs estruturados, correlation ID / request ID, error tracking, health checks, métricas e alertas.

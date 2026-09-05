@@ -4,6 +4,7 @@ import type { AvailabilityState, Event, MeetingKind, PrivacyLevel } from "../dom
 import type { EventRepository } from "../ports/event-repository";
 import type { CalendarRepository } from "../ports/calendar-repository";
 import { PersonalCalendarNotFoundError } from "./errors";
+import type { AuditLogger } from "@/shared/audit";
 
 export interface CreateEventInput {
   ownerUserId: string;
@@ -25,6 +26,7 @@ export class CreateEventUseCase {
   constructor(
     private readonly eventRepository: EventRepository,
     private readonly calendarRepository: CalendarRepository,
+    private readonly auditLogger: AuditLogger,
   ) {}
 
   async execute(input: CreateEventInput): Promise<Event> {
@@ -37,7 +39,7 @@ export class CreateEventUseCase {
       throw new PersonalCalendarNotFoundError();
     }
 
-    return this.eventRepository.create({
+    const event = await this.eventRepository.create({
       id: randomUUID(),
       calendarId,
       title: input.title,
@@ -53,5 +55,13 @@ export class CreateEventUseCase {
       bufferAfterMin: input.bufferAfterMin ?? 0,
       participantUserIds: input.participantUserIds ?? [],
     });
+
+    await this.auditLogger.record({
+      action: "EVENT_CREATED",
+      actorId: input.ownerUserId,
+      metadata: { eventId: event.id },
+    });
+
+    return event;
   }
 }

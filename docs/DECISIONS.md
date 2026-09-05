@@ -15,5 +15,6 @@
 | [ADR-009](adr/ADR-009-outbox-implementation.md) | Implementação prática do Transactional Outbox | Aceito |
 | [ADR-010](adr/ADR-010-discovery-module.md) | Módulo Discovery (Explore) | Aceito |
 | [ADR-011](adr/ADR-011-rate-limiting.md) | Rate limiting | Aceito |
+| [ADR-012](adr/ADR-012-audit-logging.md) | Auditoria | Aceito |
 
 Novas ADRs devem seguir o padrão `ADR-XXX-titulo-curto.md` com seções: Status, Contexto, Decisão, Consequências.

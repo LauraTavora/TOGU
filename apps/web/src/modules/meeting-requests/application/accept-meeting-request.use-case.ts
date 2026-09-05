@@ -8,6 +8,7 @@ import { AvailabilityConflictError, MeetingRequestConcurrentlyModifiedError, Mee
 import { MeetingRequestNotOpenError } from "../domain/negotiation";
 import type { OutboxEventPublisher } from "@/shared/outbox";
 import { MeetingRequestEventType, type MeetingRequestAcceptedPayload } from "@/shared/outbox/events/meeting-request-events";
+import type { AuditLogger } from "@/shared/audit";
 
 export interface AcceptMeetingRequestOutput {
   meetingRequest: MeetingRequest;
@@ -26,6 +27,7 @@ export class AcceptMeetingRequestUseCase {
     private readonly availabilityChecker: AvailabilityChecker,
     private readonly eventCreator: EventCreator,
     private readonly eventPublisher: OutboxEventPublisher,
+    private readonly auditLogger: AuditLogger,
   ) {}
 
   async execute(meetingRequestId: string, actingUserId: string): Promise<AcceptMeetingRequestOutput> {
@@ -75,6 +77,12 @@ export class AcceptMeetingRequestUseCase {
       title: updated.title,
     };
     await this.eventPublisher.publish(MeetingRequestEventType.ACCEPTED, payload as unknown as Record<string, unknown>);
+
+    await this.auditLogger.record({
+      action: "REQUEST_ACCEPTED",
+      actorId: actingUserId,
+      metadata: { meetingRequestId: updated.id, eventId },
+    });
 
     return { meetingRequest: updated, eventId };
   }

@@ -5,6 +5,7 @@ import type { OpaqueTokenGenerator } from "../ports/opaque-token-generator";
 import type { PasswordHasher } from "../ports/password-hasher";
 import type { SessionRepository } from "../ports/session-repository";
 import { InvalidOrExpiredTokenError } from "./verify-email.use-case";
+import type { AuditLogger } from "@/shared/audit";
 
 export interface ResetPasswordInput {
   rawToken: string;
@@ -18,6 +19,7 @@ export class ResetPasswordUseCase {
     private readonly tokenGenerator: OpaqueTokenGenerator,
     private readonly passwordHasher: PasswordHasher,
     private readonly sessionRepository: SessionRepository,
+    private readonly auditLogger: AuditLogger,
   ) {}
 
   async execute(input: ResetPasswordInput): Promise<void> {
@@ -37,5 +39,7 @@ export class ResetPasswordUseCase {
 
     // Redefinir a senha revoga todas as sessões ativas — mitiga sequestro de sessão.
     await this.sessionRepository.revokeAllForUser(record.userId, now);
+
+    await this.auditLogger.record({ action: "PASSWORD_CHANGED", actorId: record.userId });
   }
 }

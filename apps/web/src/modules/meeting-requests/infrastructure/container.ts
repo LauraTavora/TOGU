@@ -1,5 +1,6 @@
 import { prisma } from "@togu/database";
 import { getOutboxRepository } from "@/shared/outbox";
+import { getAuditLogger } from "@/shared/audit";
 import { CreateMeetingRequestUseCase } from "../application/create-meeting-request.use-case";
 import { AcceptMeetingRequestUseCase } from "../application/accept-meeting-request.use-case";
 import { DeclineMeetingRequestUseCase } from "../application/decline-meeting-request.use-case";
@@ -21,6 +22,7 @@ const availabilityChecker = new AvailabilityModuleChecker();
 const eventCreator = new SchedulingModuleEventCreator();
 const priorityRanker = new PriorityModuleRanker(prisma);
 const eventPublisher = getOutboxRepository();
+const auditLogger = getAuditLogger();
 
 export function createCreateMeetingRequestUseCase(): CreateMeetingRequestUseCase {
   return new CreateMeetingRequestUseCase(meetingRequestRepository, eventPublisher);
@@ -33,11 +35,17 @@ export function createAcceptMeetingRequestUseCase(): AcceptMeetingRequestUseCase
     availabilityChecker,
     eventCreator,
     eventPublisher,
+    auditLogger,
   );
 }
 
 export function createDeclineMeetingRequestUseCase(): DeclineMeetingRequestUseCase {
-  return new DeclineMeetingRequestUseCase(meetingRequestRepository, counterProposalRepository, eventPublisher);
+  return new DeclineMeetingRequestUseCase(
+    meetingRequestRepository,
+    counterProposalRepository,
+    eventPublisher,
+    auditLogger,
+  );
 }
 
 export function createCounterProposeUseCase(): CounterProposeUseCase {

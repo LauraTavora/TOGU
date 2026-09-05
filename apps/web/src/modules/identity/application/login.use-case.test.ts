@@ -5,6 +5,7 @@ import { InMemorySessionRepository } from "../adapters/in-memory-session-reposit
 import { BcryptPasswordHasher } from "../adapters/bcrypt-password-hasher";
 import { CryptoOpaqueTokenGenerator } from "../adapters/crypto-opaque-token-generator";
 import { JoseAccessTokenSigner } from "../adapters/jose-access-token-signer";
+import { InMemoryAuditLogger } from "@/shared/audit/in-memory-audit-logger";
 
 async function buildScenario() {
   const userRepository = new InMemoryUserRepository();
@@ -12,6 +13,7 @@ async function buildScenario() {
   const passwordHasher = new BcryptPasswordHasher();
   const tokenGenerator = new CryptoOpaqueTokenGenerator();
   const accessTokenSigner = new JoseAccessTokenSigner("test-secret");
+  const auditLogger = new InMemoryAuditLogger();
 
   const passwordHash = await passwordHasher.hash("Segura123");
   const user = await userRepository.create({
@@ -26,14 +28,16 @@ async function buildScenario() {
     passwordHasher,
     tokenGenerator,
     accessTokenSigner,
+    auditLogger,
   );
 
-  return { useCase, user, sessionRepository, accessTokenSigner, tokenGenerator };
+  return { useCase, user, sessionRepository, accessTokenSigner, tokenGenerator, auditLogger };
 }
 
 describe("LoginUseCase", () => {
   it("autentica com credenciais corretas e cria uma sessão", async () => {
-    const { useCase, sessionRepository, accessTokenSigner, tokenGenerator } = await buildScenario();
+    const { useCase, sessionRepository, accessTokenSigner, tokenGenerator, auditLogger } =
+      await buildScenario();
 
     const result = await useCase.execute({ email: "ana@example.com", rawPassword: "Segura123" });
 
@@ -47,13 +51,16 @@ describe("LoginUseCase", () => {
       tokenGenerator.hash(result.refreshToken),
     );
     expect(session).not.toBeNull();
+
+    expect(auditLogger.entries).toEqual([{ action: "LOGIN", actorId: "user-1" }]);
   });
 
-  it("rejeita senha incorreta com erro genérico", async () => {
-    const { useCase } = await buildScenario();
+  it("rejeita senha incorreta com erro genérico e não registra auditoria de LOGIN", async () => {
+    const { useCase, auditLogger } = await buildScenario();
     await expect(
       useCase.execute({ email: "ana@example.com", rawPassword: "SenhaErrada1" }),
     ).rejects.toThrow(InvalidCredentialsError);
+    expect(auditLogger.entries).toHaveLength(0);
   });
 
   it("rejeita e-mail inexistente com o mesmo erro genérico (anti-enumeration)", async () => {

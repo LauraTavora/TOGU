@@ -14,6 +14,7 @@ import { BcryptPasswordHasher } from "../adapters/bcrypt-password-hasher";
 import { CryptoOpaqueTokenGenerator } from "../adapters/crypto-opaque-token-generator";
 import { JoseAccessTokenSigner } from "../adapters/jose-access-token-signer";
 import { ConsoleEmailProvider } from "../adapters/console-email-provider";
+import { getAuditLogger } from "@/shared/audit";
 
 function getAuthSecret(): string {
   const secret = process.env.AUTH_SECRET;
@@ -30,6 +31,7 @@ const workspaceProvisioner = new PrismaWorkspaceProvisioner(prisma);
 const passwordHasher = new BcryptPasswordHasher();
 const tokenGenerator = new CryptoOpaqueTokenGenerator();
 const emailProvider = new ConsoleEmailProvider();
+const auditLogger = getAuditLogger();
 
 export function getAccessTokenSigner(): JoseAccessTokenSigner {
   return new JoseAccessTokenSigner(getAuthSecret());
@@ -57,6 +59,7 @@ export function createLoginUseCase(): LoginUseCase {
     passwordHasher,
     tokenGenerator,
     getAccessTokenSigner(),
+    auditLogger,
   );
 }
 
@@ -84,5 +87,6 @@ export function createResetPasswordUseCase(): ResetPasswordUseCase {
     tokenGenerator,
     passwordHasher,
     sessionRepository,
+    auditLogger,
   );
 }
