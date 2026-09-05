@@ -3,12 +3,20 @@ import { checkAvailabilityRequestSchema } from "@togu/schemas";
 import { createCheckAvailabilityUseCase } from "@/modules/availability/infrastructure/container";
 import { requireAuth } from "@/shared/auth/require-auth";
 import { apiError } from "@/shared/http/api-error";
+import { enforceRateLimit } from "@/shared/rate-limit";
 
 export async function POST(request: Request) {
   const auth = await requireAuth(request);
   if (!auth) {
     return apiError(401, "unauthorized", "Autenticação necessária.");
   }
+
+  const rateLimited = await enforceRateLimit(auth.userId, {
+    bucket: "availability:check",
+    limit: 60,
+    windowMs: 60 * 1000,
+  });
+  if (rateLimited) return rateLimited;
 
   const body = await request.json().catch(() => null);
   const parsed = checkAvailabilityRequestSchema.safeParse(body);

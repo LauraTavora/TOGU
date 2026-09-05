@@ -37,3 +37,5 @@ Todas as mudanças relevantes deste projeto são documentadas aqui. Formato base
 - ADR-010 documenta as decisões do módulo, incluindo o que ficou explicitamente fora de escopo (Planejar Rolê, sincronização com provedor real).
 - Modelo Prisma `NearbyEvent` ganhou `endAt`, `locationName` e `isFree`.
 - 23 novos testes (domínio de distância geográfica, casos de uso, segurança de rota), totalizando 184 testes + 1 integração (skip).
+- Rate limiting implementado (`shared/rate-limit`, janela fixa em memória) e aplicado em `/auth/register`, `/auth/login`, `/auth/password-reset/{request,confirm}` (por IP), `/availability/check`, `/discovery/events`, `/events` (por usuário). Retorna `429` com `Retry-After`. ADR-011 documenta os limites escolhidos e a limitação conhecida (contador por instância — precisa de um armazenamento compartilhado tipo Redis antes de produção com múltiplas instâncias).
+- 10 novos testes (limitador, helper, integração ponta a ponta em `/auth/login`), totalizando 194 testes + 1 integração (skip).

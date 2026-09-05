@@ -27,7 +27,7 @@ SQL Injection, XSS, CSRF, SSRF, IDOR, brute-force, credential stuffing, enumerat
 Content Security Policy, HSTS, cookies seguros (`Secure`, `HttpOnly`, `SameSite`), HTTPS obrigatório, CORS restritivo, validação de entrada, encoding de saída.
 
 ## Rate limiting
-Aplicado especialmente em: `/login`, `/register`, `/password-reset`, `/invite`, `/search`, `/events`, `/availability`. Considera IP, usuário, tenant e endpoint combinados (não apenas IP isolado).
+Implementado (`shared/rate-limit`) e aplicado em `/auth/register`, `/auth/login`, `/auth/password-reset/{request,confirm}` (por IP), `/availability/check`, `/discovery/events`, `/events` (por usuário autenticado). Sempre a primeira verificação da rota, antes de qualquer acesso a banco. Ver `ADR-011` para o mapeamento completo de limites e a limitação conhecida do adapter atual (em memória por instância — precisa de armazenamento compartilhado como Redis antes de produção com múltiplas instâncias).
 
 ## Proteção de infraestrutura
 Ataques de rede/DDoS não são resolvidos só na aplicação — depende de proteção de infraestrutura (Vercel, WAF, CDN, firewall, proteção antibot, mitigação DDoS; avaliar Cloudflare como camada adicional). Código Next.js sozinho não bloqueia ataques de rede.
