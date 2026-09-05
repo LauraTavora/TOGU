@@ -15,7 +15,7 @@ export class ListCalendarEventsUseCase {
       throw new PersonalCalendarNotFoundError();
     }
 
-    const events = await this.eventRepository.findInRange(calendarId, start, end);
+    const events = await this.eventRepository.findVisibleToUserInRange(userId, calendarId, start, end);
     return [...events].sort((a, b) => a.startAt.getTime() - b.startAt.getTime());
   }
 }

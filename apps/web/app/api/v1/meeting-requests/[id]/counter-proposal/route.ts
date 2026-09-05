@@ -1,0 +1,35 @@
+import { NextResponse } from "next/server";
+import { counterProposeSchema } from "@togu/schemas";
+import { createCounterProposeUseCase } from "@/modules/meeting-requests";
+import { requireAuth } from "@/shared/auth/require-auth";
+import { apiError } from "@/shared/http/api-error";
+import { mapMeetingRequestError } from "@/shared/http/map-meeting-request-error";
+
+export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const auth = await requireAuth(request);
+  if (!auth) {
+    return apiError(401, "unauthorized", "Autenticação necessária.");
+  }
+
+  const body = await request.json().catch(() => null);
+  const parsed = counterProposeSchema.safeParse(body);
+  if (!parsed.success) {
+    return apiError(400, "invalid_input", parsed.error.message);
+  }
+
+  try {
+    const useCase = createCounterProposeUseCase();
+    const counterProposal = await useCase.execute({
+      meetingRequestId: params.id,
+      actingUserId: auth.userId,
+      startAt: new Date(parsed.data.startAt),
+      endAt: new Date(parsed.data.endAt),
+      message: parsed.data.message,
+    });
+    return NextResponse.json({ counterProposal }, { status: 201 });
+  } catch (error) {
+    const mapped = mapMeetingRequestError(error);
+    if (mapped) return mapped;
+    throw error;
+  }
+}

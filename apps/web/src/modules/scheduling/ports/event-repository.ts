@@ -40,6 +40,13 @@ export interface EventRepository {
   create(input: CreateEventInput): Promise<Event>;
   findById(id: string): Promise<Event | null>;
   findInRange(calendarId: string, start: Date, end: Date): Promise<Event[]>;
+  /**
+   * Eventos visíveis para o usuário no intervalo: os do seu próprio
+   * calendário mais aqueles em que ele é apenas participante (ex.: um
+   * encontro confirmado a partir de outra pessoa) — ver módulo
+   * `meeting-requests`.
+   */
+  findVisibleToUserInRange(userId: string, calendarId: string, start: Date, end: Date): Promise<Event[]>;
   update(id: string, patch: UpdateEventInput): Promise<Event>;
   delete(id: string): Promise<void>;
 }

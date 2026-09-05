@@ -240,4 +240,24 @@ describe("ListCalendarEventsUseCase", () => {
 
     expect(events).toHaveLength(0);
   });
+
+  it("mostra no calendário de um participante o evento criado no calendário de outra pessoa", async () => {
+    const { createEvent, listCalendar } = scenario;
+    await createEvent.execute({
+      ownerUserId: "ana",
+      title: "Jantar com João",
+      startAt: new Date("2026-01-10T20:00:00Z"),
+      endAt: new Date("2026-01-10T22:00:00Z"),
+      participantUserIds: ["joao"],
+    });
+
+    const joaoEvents = await listCalendar.execute(
+      "joao",
+      new Date("2026-01-10T00:00:00Z"),
+      new Date("2026-01-11T00:00:00Z"),
+    );
+
+    expect(joaoEvents).toHaveLength(1);
+    expect(joaoEvents[0]?.title).toBe("Jantar com João");
+  });
 });
