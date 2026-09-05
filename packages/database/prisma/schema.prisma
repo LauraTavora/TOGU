@@ -516,6 +516,19 @@ model NotificationPreference {
   @@map("notification_preferences")
 }
 
+// ---------- Outbox (ver docs/adr/ADR-004 e ADR-009) ----------
+
+model OutboxEvent {
+  id          String    @id @default(cuid())
+  type        String
+  payload     Json
+  createdAt   DateTime  @default(now())
+  processedAt DateTime?
+
+  @@index([processedAt, createdAt])
+  @@map("outbox_events")
+}
+
 // ---------- Integrations ----------
 
 enum ExternalCalendarProviderType {

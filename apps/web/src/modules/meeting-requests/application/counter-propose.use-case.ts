@@ -7,6 +7,11 @@ import type { CounterProposal } from "../domain/counter-proposal";
 import type { MeetingRequestRepository } from "../ports/meeting-request-repository";
 import type { CounterProposalRepository } from "../ports/counter-proposal-repository";
 import { MeetingRequestConcurrentlyModifiedError, MeetingRequestNotFoundError } from "./errors";
+import type { OutboxEventPublisher } from "@/shared/outbox";
+import {
+  MeetingRequestEventType,
+  type MeetingRequestCounterProposedPayload,
+} from "@/shared/outbox/events/meeting-request-events";
 
 export interface CounterProposeInput {
   meetingRequestId: string;
@@ -20,6 +25,7 @@ export class CounterProposeUseCase {
   constructor(
     private readonly meetingRequestRepository: MeetingRequestRepository,
     private readonly counterProposalRepository: CounterProposalRepository,
+    private readonly eventPublisher: OutboxEventPublisher,
   ) {}
 
   async execute(input: CounterProposeInput): Promise<CounterProposal> {
@@ -50,6 +56,20 @@ export class CounterProposeUseCase {
     } catch {
       throw new MeetingRequestConcurrentlyModifiedError();
     }
+
+    const payload: MeetingRequestCounterProposedPayload = {
+      meetingRequestId: meetingRequest.id,
+      requesterId: meetingRequest.requesterId,
+      participantUserIds: meetingRequest.participantUserIds,
+      proposedById: input.actingUserId,
+      startAt: proposal.startAt.toISOString(),
+      endAt: proposal.endAt.toISOString(),
+      title: meetingRequest.title,
+    };
+    await this.eventPublisher.publish(
+      MeetingRequestEventType.COUNTER_PROPOSED,
+      payload as unknown as Record<string, unknown>,
+    );
 
     return proposal;
   }

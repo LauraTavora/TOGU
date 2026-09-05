@@ -35,6 +35,18 @@ POST /api/v1/meeting-requests/:id/cancel
 ```
 Somente quem não apresentou a proposta de horário em aberto (o requester na primeira oferta, ou o autor da última contraproposta) pode aceitar/negar/contrapropor. `accept` sempre revalida disponibilidade real antes de confirmar (nunca confia no estado exibido antes) e é protegido contra condição de corrida (ver `ADR-007`). `box=received` é ordenado por prioridade por padrão (`sort=priority`), usando o Priority Engine do destinatário (ver `ADR-008`); `sort=recent` ordena por data de criação, mais recente primeiro.
 
+### Notificações (módulo `notifications`)
+```text
+GET  /api/v1/notifications?onlyUnread=true|false
+GET  /api/v1/notifications/unread-count
+POST /api/v1/notifications/:id/read
+POST /api/v1/notifications/read-all
+GET  /api/v1/notifications/preferences
+PATCH /api/v1/notifications/preferences
+POST /api/v1/internal/process-outbox   (rota interna, protegida por segredo X-Internal-Secret — não é para usuário final)
+```
+`meeting-requests` emite eventos de domínio (criada, aceita, negada, contraproposta, cancelada) para uma outbox compartilhada; `notifications` os traduz em notificações in-app. Ver `ADR-004` e `ADR-009` para a implementação e suas limitações conhecidas (ainda não há transação compartilhada entre a mutação de negócio e o registro do evento).
+
 ### Prioridade (módulo `priority`)
 ```text
 GET    /api/v1/priority/rules
