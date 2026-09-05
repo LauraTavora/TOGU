@@ -45,7 +45,34 @@ export function createHttpClient(config: ApiClientConfig = {}) {
     return parsed as T;
   }
 
-  return { request };
+  /**
+   * Baixa um arquivo autenticado (ex.: exportação de dados) sem expor o
+   * access token para quem chama — mesma injeção de header do `request`.
+   */
+  async function download(path: string, filename: string): Promise<void> {
+    const headers = new Headers();
+    const token = config.getAccessToken?.();
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
+
+    const response = await fetch(`${baseUrl}${path}`, { headers, credentials: "include" });
+    if (!response.ok) {
+      throw new ApiError(response.status, "download_failed", "Não foi possível baixar o arquivo.");
+    }
+
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  return { request, download };
 }
 
 export type HttpClient = ReturnType<typeof createHttpClient>;

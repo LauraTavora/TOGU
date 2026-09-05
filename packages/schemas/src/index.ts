@@ -7,3 +7,4 @@ export * from "./priority";
 export * from "./notifications";
 export * from "./discovery";
 export * from "./users";
+export * from "./account";

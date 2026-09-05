@@ -36,6 +36,16 @@ POST /api/v1/meeting-requests/:id/cancel
 ```
 Somente quem não apresentou a proposta de horário em aberto (o requester na primeira oferta, ou o autor da última contraproposta) pode aceitar/negar/contrapropor. `accept` sempre revalida disponibilidade real antes de confirmar (nunca confia no estado exibido antes) e é protegido contra condição de corrida (ver `ADR-007`). `box=received` é ordenado por prioridade por padrão (`sort=priority`), usando o Priority Engine do destinatário (ver `ADR-008`); `sort=recent` ordena por data de criação, mais recente primeiro. `GET .../counter-proposals` lista o histórico de contrapropostas de uma solicitação (necessário para o cliente saber o horário renegociado quando `status=COUNTER_PROPOSED`); só quem faz parte da solicitação (requester ou participantes) pode ver — `403` para qualquer outra pessoa. Ver `ADR-016`.
 
+### Conta e privacidade — LGPD (módulos `identity` e `data-export`)
+```text
+GET    /api/v1/account/deletion
+POST   /api/v1/account/deletion
+DELETE /api/v1/account/deletion
+GET    /api/v1/account/export
+POST   /api/v1/internal/execute-account-deletions   (rota interna, protegida por segredo X-Internal-Secret)
+```
+`POST .../deletion` exige a senha atual (reautenticação), agenda a exclusão com 14 dias de carência e revoga todas as sessões ativas; `DELETE` cancela a qualquer momento dentro da carência; `GET` devolve o status atual (`{requestedAt, scheduledDeletionAt}`, ambos `null` se nada foi solicitado). A exclusão de fato é anonimização (e-mail/senha), não remoção da linha — ver `ADR-022` para o porquê e para o que ainda não é purgado. `GET .../export` devolve um JSON com `Content-Disposition: attachment` contendo tudo que o produto sabe sobre o usuário.
+
 ### Identidade pública (módulo `identity`)
 ```text
 GET /api/v1/users?ids=id1,id2,id3

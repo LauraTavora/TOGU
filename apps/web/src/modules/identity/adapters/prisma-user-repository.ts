@@ -36,11 +36,35 @@ export class PrismaUserRepository implements UserRepository {
     await this.prisma.user.update({ where: { id: userId }, data: { passwordHash } });
   }
 
+  async setDeletionRequestedAt(userId: string, at: Date | null): Promise<void> {
+    await this.prisma.user.update({ where: { id: userId }, data: { deletionRequestedAt: at } });
+  }
+
+  async findScheduledForDeletion(before: Date): Promise<User[]> {
+    const records = await this.prisma.user.findMany({
+      where: { deletionRequestedAt: { not: null, lte: before } },
+    });
+    return records.map((record) => this.toDomain(record));
+  }
+
+  async anonymize(userId: string, anonymizedEmail: string): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        email: anonymizedEmail,
+        passwordHash: null,
+        emailVerified: null,
+        deletionRequestedAt: null,
+      },
+    });
+  }
+
   private toDomain(record: {
     id: string;
     email: string;
     passwordHash: string | null;
     emailVerified: Date | null;
+    deletionRequestedAt: Date | null;
     createdAt: Date;
   }): User {
     return {
@@ -48,6 +72,7 @@ export class PrismaUserRepository implements UserRepository {
       email: record.email,
       passwordHash: record.passwordHash ?? "",
       emailVerifiedAt: record.emailVerified,
+      deletionRequestedAt: record.deletionRequestedAt,
       createdAt: record.createdAt,
     };
   }
