@@ -24,6 +24,18 @@ GET  /api/v1/auth/me
 ```
 Detalhamento da estratégia (JWT de acesso + refresh token opaco rotativo) em `docs/adr/ADR-006-authentication-strategy.md`.
 
+### Círculos (módulo `circles`)
+```text
+POST   /api/v1/circles
+GET    /api/v1/circles
+PATCH  /api/v1/circles/:id
+DELETE /api/v1/circles/:id
+GET    /api/v1/circles/:id/members
+POST   /api/v1/circles/:id/members
+DELETE /api/v1/circles/:id/members/:userId
+```
+Círculos pertencem ao workspace pessoal do criador. Apenas quem gerencia o workspace (`OWNER`/`ADMIN`) pode renomear, excluir ou gerenciar membros; membros do próprio círculo também podem visualizar a lista de membros.
+
 ### Eventos (módulo `scheduling`)
 ```text
 POST /api/v1/events

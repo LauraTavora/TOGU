@@ -395,11 +395,12 @@ model Circle {
 }
 
 model CircleMember {
-  id       String @id @default(cuid())
-  circleId String
-  circle   Circle @relation(fields: [circleId], references: [id], onDelete: Cascade)
-  userId   String
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id @default(cuid())
+  circleId  String
+  circle    Circle   @relation(fields: [circleId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 
   @@unique([circleId, userId])
   @@map("circle_members")
