@@ -17,3 +17,6 @@ Todas as mudanças relevantes deste projeto são documentadas aqui. Formato base
 - Módulo `scheduling` completo: CRUD de eventos (criar, ler, atualizar, excluir) e listagem de calendário por intervalo, com checagem de ownership/participante (proteção contra IDOR) e provisionamento automático do calendário pessoal no cadastro. Endpoints `POST /api/v1/events`, `GET/PATCH/DELETE /api/v1/events/:id`, `GET /api/v1/calendar`.
 - 24 novos testes (domínio, casos de uso e segurança de rota), totalizando 69 testes.
 - Fluxo de contribuição alterado para branch por feature + Pull Request + merge (em vez de push direto em `main`).
+- Módulo `circles` completo: criar/renomear/excluir círculo, adicionar/remover/listar membros. Círculos pertencem ao workspace pessoal do criador; apenas quem gerencia o workspace pode administrar, membros podem visualizar a lista. Endpoints `POST/GET /api/v1/circles`, `PATCH/DELETE /api/v1/circles/:id`, `GET/POST /api/v1/circles/:id/members`, `DELETE /api/v1/circles/:id/members/:userId`.
+- 21 novos testes (domínio, casos de uso e segurança de rota), totalizando 90 testes.
+- Modelo Prisma `CircleMember` ganhou `createdAt`.
