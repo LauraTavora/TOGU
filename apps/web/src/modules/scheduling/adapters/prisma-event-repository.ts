@@ -71,6 +71,24 @@ export class PrismaEventRepository implements EventRepository {
     return records.map((record) => this.toDomain(record));
   }
 
+  async findVisibleToUserInRange(
+    userId: string,
+    calendarId: string,
+    start: Date,
+    end: Date,
+  ): Promise<Event[]> {
+    const records = await this.prisma.event.findMany({
+      where: {
+        OR: [{ calendarId }, { participants: { some: { userId } } }],
+        startAt: { lt: end },
+        endAt: { gt: start },
+      },
+      include: { participants: { select: { userId: true } } },
+      orderBy: { startAt: "asc" },
+    });
+    return records.map((record) => this.toDomain(record));
+  }
+
   async update(id: string, patch: UpdateEventInput): Promise<Event> {
     const record = await this.prisma.event.update({
       where: { id },

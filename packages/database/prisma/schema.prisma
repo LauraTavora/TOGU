@@ -345,6 +345,7 @@ model MeetingRequest {
   createdAt    DateTime             @default(now())
   updatedAt    DateTime             @updatedAt
   resolvedEventId String?
+  declineMessage  String?
 
   participants     MeetingParticipant[]
   counterProposals CounterProposal[]

@@ -20,3 +20,9 @@ Todas as mudanças relevantes deste projeto são documentadas aqui. Formato base
 - Módulo `circles` completo: criar/renomear/excluir círculo, adicionar/remover/listar membros. Círculos pertencem ao workspace pessoal do criador; apenas quem gerencia o workspace pode administrar, membros podem visualizar a lista. Endpoints `POST/GET /api/v1/circles`, `PATCH/DELETE /api/v1/circles/:id`, `GET/POST /api/v1/circles/:id/members`, `DELETE /api/v1/circles/:id/members/:userId`.
 - 21 novos testes (domínio, casos de uso e segurança de rota), totalizando 90 testes.
 - Modelo Prisma `CircleMember` ganhou `createdAt`.
+- **Correção:** `AvailabilityRepository` do módulo `availability` passou a consultar calendários/eventos reais via Prisma (`PrismaAvailabilityRepository`), substituindo o repositório em memória sempre vazio usado até então (todo `/api/v1/availability/check` retornava `AVAILABLE` incondicionalmente).
+- `scheduling`: `GET /api/v1/calendar` agora também mostra eventos em que o usuário é apenas participante (não só dono do calendário), necessário para o encontro confirmado aparecer na agenda de ambas as partes.
+- Módulo `meeting-requests` completo: criar solicitação, aceitar (com revalidação de disponibilidade e proteção contra condição de corrida), negar (com/sem mensagem), contrapropor (histórico completo preservado) e cancelar. Regra de negociação: só quem não fez a proposta corrente pode responder. Endpoints `POST/GET /api/v1/meeting-requests`, `POST /api/v1/meeting-requests/:id/{accept,decline,counter-proposal,cancel}`.
+- ADR-007 documenta a estratégia de negociação e concorrência.
+- Modelo Prisma `MeetingRequest` ganhou `declineMessage`.
+- 34 novos testes (domínio de negociação, casos de uso, condição de corrida, segurança de rota), totalizando 124 testes (+1 marcado como integração, pendente de banco real).

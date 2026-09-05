@@ -40,6 +40,20 @@ export class InMemoryEventRepository implements EventRepository {
     );
   }
 
+  async findVisibleToUserInRange(
+    userId: string,
+    calendarId: string,
+    start: Date,
+    end: Date,
+  ): Promise<Event[]> {
+    return Array.from(this.events.values()).filter(
+      (event) =>
+        (event.calendarId === calendarId || event.participantUserIds.includes(userId)) &&
+        event.startAt < end &&
+        start < event.endAt,
+    );
+  }
+
   async update(id: string, patch: UpdateEventInput): Promise<Event> {
     const existing = this.events.get(id);
     if (!existing) {

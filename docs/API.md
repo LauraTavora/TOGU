@@ -24,6 +24,17 @@ GET  /api/v1/auth/me
 ```
 Detalhamento da estratégia (JWT de acesso + refresh token opaco rotativo) em `docs/adr/ADR-006-authentication-strategy.md`.
 
+### Solicitações de encontro (módulo `meeting-requests`)
+```text
+POST /api/v1/meeting-requests
+GET  /api/v1/meeting-requests?box=received|sent&status=...
+POST /api/v1/meeting-requests/:id/accept
+POST /api/v1/meeting-requests/:id/decline
+POST /api/v1/meeting-requests/:id/counter-proposal
+POST /api/v1/meeting-requests/:id/cancel
+```
+Somente quem não apresentou a proposta de horário em aberto (o requester na primeira oferta, ou o autor da última contraproposta) pode aceitar/negar/contrapropor. `accept` sempre revalida disponibilidade real antes de confirmar (nunca confia no estado exibido antes) e é protegido contra condição de corrida (ver `ADR-007`).
+
 ### Círculos (módulo `circles`)
 ```text
 POST   /api/v1/circles
