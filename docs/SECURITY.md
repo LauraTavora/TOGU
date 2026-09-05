@@ -24,7 +24,9 @@ Segurança tratada como requisito funcional: **Security by Design** e **Privacy 
 SQL Injection, XSS, CSRF, SSRF, IDOR, brute-force, credential stuffing, enumeration, clickjacking, open redirect, mass assignment, uploads maliciosos, replay attacks.
 
 ## Controles aplicados
-Content Security Policy, HSTS, cookies seguros (`Secure`, `HttpOnly`, `SameSite`), HTTPS obrigatório, CORS restritivo, validação de entrada, encoding de saída.
+- **Implementado**: Content Security Policy (nonce por requisição via `middleware.ts`, todo o app renderizado dinamicamente para isso funcionar — ver `ADR-020`), HSTS (produção), `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, cookies seguros (`Secure` em produção, `HttpOnly`, `SameSite=Lax` — `shared/http/refresh-cookie.ts`, desde a `ADR-006`), validação de entrada (schemas Zod em toda rota).
+- **Depende da infraestrutura de deploy, não do código**: HTTPS obrigatório (Vercel/plataforma).
+- **Pendente**: CORS restritivo — nenhum handling de CORS existe ainda; só passa a ser necessário quando um cliente cross-origin real existir (ex.: o app mobile, ainda não implementado). Encoding de saída depende de cada renderização específica (React já escapa por padrão; não há um controle central dedicado a isso).
 
 ## Rate limiting
 Implementado (`shared/rate-limit`) e aplicado em `/auth/register`, `/auth/login`, `/auth/password-reset/{request,confirm}` (por IP), `/availability/check`, `/discovery/events`, `/events` (por usuário autenticado). Sempre a primeira verificação da rota, antes de qualquer acesso a banco. Ver `ADR-011` para o mapeamento completo de limites e a limitação conhecida do adapter atual (em memória por instância — precisa de armazenamento compartilhado como Redis antes de produção com múltiplas instâncias).
