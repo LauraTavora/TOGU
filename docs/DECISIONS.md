@@ -18,5 +18,6 @@
 | [ADR-012](adr/ADR-012-audit-logging.md) | Auditoria | Aceito |
 | [ADR-013](adr/ADR-013-web-ui-foundation.md) | Fundação da UI web (Design System, SDK e autenticação) | Aceito |
 | [ADR-014](adr/ADR-014-app-shell-and-home.md) | App Shell (navegação) e Home real | Aceito |
+| [ADR-015](adr/ADR-015-calendar-page.md) | Página de Calendário (visões Agenda e Semana) | Aceito |
 
 Novas ADRs devem seguir o padrão `ADR-XXX-titulo-curto.md` com seções: Status, Contexto, Decisão, Consequências.

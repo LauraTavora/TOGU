@@ -36,14 +36,16 @@ lib/
 components/
   button.tsx           (variantes primary/secondary/ghost/danger)
   input.tsx             (label + hint + erro, acessível via aria-describedby)
+  textarea.tsx          (mesmo padrão visual do input)
   card.tsx
   badge.tsx
   avatar.tsx            (iniciais como fallback)
   status-indicator.tsx  (ver seção seguinte)
   empty-state.tsx
   skeleton.tsx
+  dialog.tsx            (modal simples, sem dependência — ocupa a largura toda em telas pequenas)
 ```
-Ainda não implementados (pendentes de UI futura): `dialog`, `bottom-sheet`, `calendar-primitives`.
+Ainda não implementados (pendentes de UI futura): `bottom-sheet` dedicado (o `Dialog` já cobre o caso em telas pequenas), `calendar-primitives`.
 
 ## Componentes de status (padronizados)
 ```text
