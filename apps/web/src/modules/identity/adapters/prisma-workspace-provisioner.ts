@@ -14,6 +14,11 @@ export class PrismaWorkspaceProvisioner implements WorkspaceProvisioner {
         memberships: {
           create: { id: randomUUID(), userId, role: "OWNER" },
         },
+        // Toda conta ganha um calendário pessoal por padrão (docs/ARCHITECTURE.md
+        // §Multi-tenant) — o módulo `scheduling` o localiza via CalendarRepository.
+        calendars: {
+          create: { id: randomUUID(), ownerId: userId, name: "Minha agenda" },
+        },
       },
     });
     return { workspaceId: workspace.id };
