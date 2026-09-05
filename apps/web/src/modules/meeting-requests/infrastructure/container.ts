@@ -10,6 +10,7 @@ import {
   ListReceivedMeetingRequestsUseCase,
   ListSentMeetingRequestsUseCase,
 } from "../application/list-meeting-requests.use-case";
+import { ListCounterProposalsUseCase } from "../application/list-counter-proposals.use-case";
 import { PrismaMeetingRequestRepository } from "../adapters/prisma-meeting-request-repository";
 import { PrismaCounterProposalRepository } from "../adapters/prisma-counter-proposal-repository";
 import { AvailabilityModuleChecker } from "../adapters/availability-module-checker";
@@ -62,4 +63,8 @@ export function createListReceivedMeetingRequestsUseCase(): ListReceivedMeetingR
 
 export function createListSentMeetingRequestsUseCase(): ListSentMeetingRequestsUseCase {
   return new ListSentMeetingRequestsUseCase(meetingRequestRepository);
+}
+
+export function createListCounterProposalsUseCase(): ListCounterProposalsUseCase {
+  return new ListCounterProposalsUseCase(meetingRequestRepository, counterProposalRepository);
 }

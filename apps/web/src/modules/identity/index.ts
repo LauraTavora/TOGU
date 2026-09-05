@@ -6,7 +6,9 @@ export {
   createRefreshSessionUseCase,
   createRequestPasswordResetUseCase,
   createResetPasswordUseCase,
+  createGetUsersPublicInfoUseCase,
 } from "./infrastructure/container";
+export type { UserPublicInfo } from "./application/get-users-public-info.use-case";
 
 export { EmailAlreadyRegisteredError } from "./application/register-user.use-case";
 export { InvalidOrExpiredTokenError } from "./application/verify-email.use-case";

@@ -6,6 +6,7 @@ export {
   createCancelMeetingRequestUseCase,
   createListReceivedMeetingRequestsUseCase,
   createListSentMeetingRequestsUseCase,
+  createListCounterProposalsUseCase,
 } from "./infrastructure/container";
 
 export {

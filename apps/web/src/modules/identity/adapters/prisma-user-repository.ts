@@ -15,6 +15,12 @@ export class PrismaUserRepository implements UserRepository {
     return record ? this.toDomain(record) : null;
   }
 
+  async findManyByIds(ids: string[]): Promise<User[]> {
+    if (ids.length === 0) return [];
+    const records = await this.prisma.user.findMany({ where: { id: { in: ids } } });
+    return records.map((record) => this.toDomain(record));
+  }
+
   async create(input: CreateUserInput): Promise<User> {
     const record = await this.prisma.user.create({
       data: { id: input.id, email: input.email, passwordHash: input.passwordHash },
