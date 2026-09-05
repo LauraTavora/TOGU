@@ -4,9 +4,8 @@
 **Ter acesso à disponibilidade de alguém não significa ter acesso aos compromissos dessa pessoa.** Por padrão, terceiros veem apenas `Available | Soft Hold | Busy` — nunca título, local, participantes ou descrição, salvo permissão explícita concedida individualmente ou por Circle.
 
 ## Direitos do titular garantidos pelo produto
-- Solicitar seus dados (exportação estruturada).
-- Exportar dados.
-- Apagar a conta (ver fluxo em `PRODUCT.md`/seção de deleção — confirmação, reautenticação, grace period, anonimização/remoção conforme obrigação legal).
+- **Exportar dados**: `GET /api/v1/account/export` — implementado (ADR-022). Baixa um JSON com conta, workspaces, calendários/eventos próprios, solicitações enviadas/recebidas, círculos, regras de prioridade, eventos salvos, contatos, preferências de notificação e histórico de auditoria.
+- **Apagar a conta**: `POST/DELETE /api/v1/account/deletion` — implementado (ADR-022): reautenticação por senha, carência de 14 dias (cancelável a qualquer momento), depois anonimização (e-mail/senha) via job protegido por segredo. **Escopo real, não hipotético**: a anonimização cobre a conta em si; dados pessoais em outros módulos (prioridades, eventos salvos, círculos, contatos, preferências) ainda não são purgados automaticamente — ver ADR-022 para o que falta.
 - Revogar consentimento (geolocalização, integrações externas).
 - Controlar geolocalização (uso pontual e explícito, sem histórico persistido desnecessário).
 - Controlar integrações (conectar/desconectar calendários externos a qualquer momento).
@@ -24,7 +23,7 @@
 
 ## Retenção
 - Logs de auditoria retidos pelo prazo mínimo necessário para segurança/obrigação legal, sem dados sensíveis (senhas, tokens) nunca registrados.
-- Ao apagar conta: dados pessoais removidos ou anonimizados; registros que precisam ser preservados por obrigação legal (ex.: auditoria de segurança) são anonimizados quanto à identidade do titular quando possível.
+- Ao apagar conta: e-mail e senha são anonimizados (a linha de `User` continua existindo — necessário para não quebrar calendários/solicitações/convites que outras pessoas ainda enxergam, ver ADR-022); dados pessoais em outros módulos (prioridades, eventos salvos, contatos, círculos, preferências) ainda não têm purga automática — gap conhecido e documentado, não uma anonimização completa hoje.
 
 ## Papéis
 - Controlador: TOGU (operador da plataforma).

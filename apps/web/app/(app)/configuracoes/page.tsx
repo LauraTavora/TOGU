@@ -7,7 +7,17 @@ import { ApiError } from "@togu/sdk";
 import { useAuth } from "@/client/auth/auth-provider";
 import { PRIORITY_LEVEL_LABEL, PRIORITY_TARGET_TYPE_LABEL } from "@/client/settings/format";
 import { PriorityRuleFormDialog } from "@/client/settings/priority-rule-form-dialog";
+import { AccountDeletionDialog } from "@/client/settings/account-deletion-dialog";
 import type { NotificationPreferencesDto, PriorityLevel, PriorityRuleDto, PriorityTargetType } from "@/client/settings/types";
+
+const ACCOUNT_DELETION_GRACE_PERIOD_DAYS = 14;
+
+const dateFormatter = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
+
+interface AccountDeletionStatusDto {
+  requestedAt: string | null;
+  scheduledDeletionAt: string | null;
+}
 
 interface CircleOption {
   id: string;
@@ -31,22 +41,34 @@ export default function ConfiguracoesPage() {
   const [error, setError] = useState<string | null>(null);
   const [ruleFormOpen, setRuleFormOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [deletionStatus, setDeletionStatus] = useState<AccountDeletionStatusDto | null>(null);
+  const [deletionDialogOpen, setDeletionDialogOpen] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+  const [isCancelingDeletion, setIsCancelingDeletion] = useState(false);
+  const [privacyError, setPrivacyError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     if (!userId) return;
     try {
-      const [{ users }, { preferences: fetchedPreferences }, { rules: fetchedRules }, { circles: fetchedCircles }] =
-        await Promise.all([
-          http.request<{ users: { id: string; email: string }[] }>(`/api/v1/users?ids=${userId}`),
-          http.request<{ preferences: NotificationPreferencesDto }>("/api/v1/notifications/preferences"),
-          http.request<{ rules: PriorityRuleDto[] }>("/api/v1/priority/rules"),
-          http.request<{ circles: CircleOption[] }>("/api/v1/circles"),
-        ]);
+      const [
+        { users },
+        { preferences: fetchedPreferences },
+        { rules: fetchedRules },
+        { circles: fetchedCircles },
+        fetchedDeletionStatus,
+      ] = await Promise.all([
+        http.request<{ users: { id: string; email: string }[] }>(`/api/v1/users?ids=${userId}`),
+        http.request<{ preferences: NotificationPreferencesDto }>("/api/v1/notifications/preferences"),
+        http.request<{ rules: PriorityRuleDto[] }>("/api/v1/priority/rules"),
+        http.request<{ circles: CircleOption[] }>("/api/v1/circles"),
+        http.request<AccountDeletionStatusDto>("/api/v1/account/deletion"),
+      ]);
 
       setEmail(users[0]?.email ?? null);
       setPreferences(fetchedPreferences);
       setRules(fetchedRules);
       setCircles(fetchedCircles);
+      setDeletionStatus(fetchedDeletionStatus);
       setError(null);
 
       const circleNameById = Object.fromEntries(fetchedCircles.map((circle) => [circle.id, circle.name]));
@@ -110,6 +132,37 @@ export default function ConfiguracoesPage() {
   async function handleLogout() {
     setIsLoggingOut(true);
     await logout();
+  }
+
+  async function handleExportData() {
+    setPrivacyError(null);
+    setIsExporting(true);
+    try {
+      await http.download("/api/v1/account/export", `togu-dados-${userId}.json`);
+    } catch (err) {
+      setPrivacyError(err instanceof ApiError ? err.message : "Não foi possível exportar seus dados.");
+    } finally {
+      setIsExporting(false);
+    }
+  }
+
+  async function handleRequestDeletion(password: string) {
+    await http.request("/api/v1/account/deletion", { method: "POST", body: JSON.stringify({ password }) });
+    setDeletionDialogOpen(false);
+    await load();
+  }
+
+  async function handleCancelDeletion() {
+    setPrivacyError(null);
+    setIsCancelingDeletion(true);
+    try {
+      await http.request("/api/v1/account/deletion", { method: "DELETE" });
+      await load();
+    } catch (err) {
+      setPrivacyError(err instanceof ApiError ? err.message : "Não foi possível cancelar a exclusão.");
+    } finally {
+      setIsCancelingDeletion(false);
+    }
   }
 
   return (
@@ -209,12 +262,47 @@ export default function ConfiguracoesPage() {
 
       <section className="flex flex-col gap-3">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-text-secondary">Privacidade</h2>
-        <Card>
-          <p className="text-sm text-text-secondary">
-            Exportar seus dados e apagar sua conta ainda não estão disponíveis por aqui — chegam em uma próxima
-            entrega (ver docs/PRIVACY-LGPD.md).
+
+        {privacyError && (
+          <p role="alert" className="text-sm text-danger-conflict">
+            {privacyError}
           </p>
-        </Card>
+        )}
+
+        {deletionStatus?.scheduledDeletionAt ? (
+          <Card className="flex items-center justify-between gap-3 border-danger-conflict/40">
+            <p className="text-sm text-text-primary">
+              Sua conta será excluída em{" "}
+              <strong>{dateFormatter.format(new Date(deletionStatus.scheduledDeletionAt))}</strong>.
+            </p>
+            <Button variant="secondary" size="sm" onClick={handleCancelDeletion} disabled={isCancelingDeletion}>
+              {isCancelingDeletion ? "Cancelando..." : "Cancelar exclusão"}
+            </Button>
+          </Card>
+        ) : (
+          <Card className="flex flex-col gap-3">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-sm font-medium text-text-primary">Exportar meus dados</p>
+                <p className="text-xs text-text-secondary">Baixa um arquivo com tudo que sabemos sobre você.</p>
+              </div>
+              <Button variant="ghost" size="sm" onClick={handleExportData} disabled={isExporting}>
+                {isExporting ? "Exportando..." : "Exportar"}
+              </Button>
+            </div>
+            <div className="flex items-center justify-between gap-3 border-t border-border pt-3">
+              <div>
+                <p className="text-sm font-medium text-text-primary">Apagar minha conta</p>
+                <p className="text-xs text-text-secondary">
+                  Agenda a exclusão com {ACCOUNT_DELETION_GRACE_PERIOD_DAYS} dias de carência.
+                </p>
+              </div>
+              <Button variant="danger" size="sm" onClick={() => setDeletionDialogOpen(true)}>
+                Apagar conta
+              </Button>
+            </div>
+          </Card>
+        )}
       </section>
 
       <PriorityRuleFormDialog
@@ -222,6 +310,13 @@ export default function ConfiguracoesPage() {
         onClose={() => setRuleFormOpen(false)}
         circles={circles}
         onSubmit={handleCreateRule}
+      />
+
+      <AccountDeletionDialog
+        open={deletionDialogOpen}
+        onClose={() => setDeletionDialogOpen(false)}
+        gracePeriodDays={ACCOUNT_DELETION_GRACE_PERIOD_DAYS}
+        onConfirm={handleRequestDeletion}
       />
     </div>
   );

@@ -25,6 +25,7 @@ export class InMemoryUserRepository implements UserRepository {
       email: input.email,
       passwordHash: input.passwordHash,
       emailVerifiedAt: null,
+      deletionRequestedAt: null,
       createdAt: new Date(),
     };
     this.users.set(user.id, user);
@@ -39,5 +40,25 @@ export class InMemoryUserRepository implements UserRepository {
   async updatePasswordHash(userId: string, passwordHash: string): Promise<void> {
     const user = this.users.get(userId);
     if (user) user.passwordHash = passwordHash;
+  }
+
+  async setDeletionRequestedAt(userId: string, at: Date | null): Promise<void> {
+    const user = this.users.get(userId);
+    if (user) user.deletionRequestedAt = at;
+  }
+
+  async findScheduledForDeletion(before: Date): Promise<User[]> {
+    return Array.from(this.users.values()).filter(
+      (user) => user.deletionRequestedAt !== null && user.deletionRequestedAt <= before,
+    );
+  }
+
+  async anonymize(userId: string, anonymizedEmail: string): Promise<void> {
+    const user = this.users.get(userId);
+    if (!user) return;
+    user.email = anonymizedEmail;
+    user.passwordHash = "";
+    user.emailVerifiedAt = null;
+    user.deletionRequestedAt = null;
   }
 }

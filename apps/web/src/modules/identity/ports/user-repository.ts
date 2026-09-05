@@ -13,4 +13,8 @@ export interface UserRepository {
   create(input: CreateUserInput): Promise<User>;
   markEmailVerified(userId: string, verifiedAt: Date): Promise<void>;
   updatePasswordHash(userId: string, passwordHash: string): Promise<void>;
+  setDeletionRequestedAt(userId: string, at: Date | null): Promise<void>;
+  findScheduledForDeletion(before: Date): Promise<User[]>;
+  /** Anonimiza a conta (e-mail/senha) sem apagar a linha — ver ADR-022. */
+  anonymize(userId: string, anonymizedEmail: string): Promise<void>;
 }

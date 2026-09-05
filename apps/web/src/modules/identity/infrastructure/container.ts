@@ -8,6 +8,10 @@ import { RequestPasswordResetUseCase } from "../application/request-password-res
 import { ResetPasswordUseCase } from "../application/reset-password.use-case";
 import { GetUsersPublicInfoUseCase } from "../application/get-users-public-info.use-case";
 import { FindUserByEmailUseCase } from "../application/find-user-by-email.use-case";
+import { RequestAccountDeletionUseCase } from "../application/request-account-deletion.use-case";
+import { CancelAccountDeletionUseCase } from "../application/cancel-account-deletion.use-case";
+import { GetAccountDeletionStatusUseCase } from "../application/get-account-deletion-status.use-case";
+import { ExecuteScheduledAccountDeletionsUseCase } from "../application/execute-scheduled-account-deletions.use-case";
 import { PrismaUserRepository } from "../adapters/prisma-user-repository";
 import { PrismaSessionRepository } from "../adapters/prisma-session-repository";
 import { PrismaAuthTokenRepository } from "../adapters/prisma-auth-token-repository";
@@ -99,4 +103,20 @@ export function createGetUsersPublicInfoUseCase(): GetUsersPublicInfoUseCase {
 
 export function createFindUserByEmailUseCase(): FindUserByEmailUseCase {
   return new FindUserByEmailUseCase(userRepository);
+}
+
+export function createRequestAccountDeletionUseCase(): RequestAccountDeletionUseCase {
+  return new RequestAccountDeletionUseCase(userRepository, passwordHasher, sessionRepository, auditLogger);
+}
+
+export function createCancelAccountDeletionUseCase(): CancelAccountDeletionUseCase {
+  return new CancelAccountDeletionUseCase(userRepository);
+}
+
+export function createGetAccountDeletionStatusUseCase(): GetAccountDeletionStatusUseCase {
+  return new GetAccountDeletionStatusUseCase(userRepository);
+}
+
+export function createExecuteScheduledAccountDeletionsUseCase(): ExecuteScheduledAccountDeletionsUseCase {
+  return new ExecuteScheduledAccountDeletionsUseCase(userRepository, auditLogger);
 }

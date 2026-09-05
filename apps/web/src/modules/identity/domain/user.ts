@@ -3,5 +3,6 @@ export interface User {
   email: string;
   passwordHash: string;
   emailVerifiedAt: Date | null;
+  deletionRequestedAt: Date | null;
   createdAt: Date;
 }
