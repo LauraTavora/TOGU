@@ -24,14 +24,15 @@ GET  /api/v1/auth/me
 ```
 Detalhamento da estratégia (JWT de acesso + refresh token opaco rotativo) em `docs/adr/ADR-006-authentication-strategy.md`.
 
-### Eventos
+### Eventos (módulo `scheduling`)
 ```text
 POST /api/v1/events
 GET  /api/v1/events/:id
 PATCH /api/v1/events/:id
 DELETE /api/v1/events/:id
-GET  /api/v1/calendar
+GET  /api/v1/calendar?start=...&end=...
 ```
+Todo evento pertence ao calendário pessoal do usuário autenticado (provisionado automaticamente no cadastro — ver `ADR-002`). Apenas o dono do calendário pode editar/excluir; dono e participantes podem visualizar o detalhe completo — qualquer outra pessoa recebe `403`.
 
 ### Solicitações de encontro
 ```text

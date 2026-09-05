@@ -14,3 +14,6 @@ Todas as mudanças relevantes deste projeto são documentadas aqui. Formato base
 - ADR-006: estratégia de autenticação (JWT de acesso + refresh token opaco rotativo, bcrypt, anti-enumeration).
 - Schema Prisma estendido com o modelo `AuthToken` (verificação de e-mail / redefinição de senha).
 - 45 testes automatizados (unitários + segurança) cobrindo `AvailabilityEngine` e todo o módulo `identity`; `tsc --noEmit` limpo.
+- Módulo `scheduling` completo: CRUD de eventos (criar, ler, atualizar, excluir) e listagem de calendário por intervalo, com checagem de ownership/participante (proteção contra IDOR) e provisionamento automático do calendário pessoal no cadastro. Endpoints `POST /api/v1/events`, `GET/PATCH/DELETE /api/v1/events/:id`, `GET /api/v1/calendar`.
+- 24 novos testes (domínio, casos de uso e segurança de rota), totalizando 69 testes.
+- Fluxo de contribuição alterado para branch por feature + Pull Request + merge (em vez de push direto em `main`).
