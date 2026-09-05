@@ -12,7 +12,7 @@ Production
 
 Cada PR gera Preview automático (Vercel); Production só recebe deploy após pipeline de CI completo (`TESTING.md`) aprovado.
 
-**Status real:** o pipeline de CI (GitHub Actions, `.github/workflows/ci.yml` — typecheck, lint, testes, build em todo push/PR para `main`) existe desde `ADR-021`. O projeto **ainda não está conectado a nenhum ambiente Vercel** — não há Preview automático nem deploy de Production configurado; isso é o próximo passo antes do primeiro deploy real, não algo já em funcionamento.
+**Status real:** o pipeline de CI (GitHub Actions, `.github/workflows/ci.yml` — typecheck, lint, testes, build em todo push/PR para `main`) existe desde `ADR-021`. Desde `ADR-024`, o projeto está de fato no ar: `https://web-psi-one-95.vercel.app`, com o repositório GitHub conectado (Preview automático por PR, deploy de Production automático em push para `main`), banco Neon real provisionado e migrado. `UPSTASH_REDIS_REST_URL`/`TOKEN` e `EMAIL_PROVIDER_API_KEY`/`EMAIL_FROM` (ADR-023) ainda não foram configurados nesse ambiente Vercel — rate limiting e e-mail transacional continuam nos fallbacks de desenvolvimento em produção até isso ser feito.
 
 ## Banco de dados
 - Desenvolvimento: PostgreSQL local.
