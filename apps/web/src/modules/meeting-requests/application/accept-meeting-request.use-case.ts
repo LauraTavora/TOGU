@@ -6,6 +6,8 @@ import type { AvailabilityChecker } from "../ports/availability-checker";
 import type { EventCreator } from "../ports/event-creator";
 import { AvailabilityConflictError, MeetingRequestConcurrentlyModifiedError, MeetingRequestNotFoundError } from "./errors";
 import { MeetingRequestNotOpenError } from "../domain/negotiation";
+import type { OutboxEventPublisher } from "@/shared/outbox";
+import { MeetingRequestEventType, type MeetingRequestAcceptedPayload } from "@/shared/outbox/events/meeting-request-events";
 
 export interface AcceptMeetingRequestOutput {
   meetingRequest: MeetingRequest;
@@ -23,6 +25,7 @@ export class AcceptMeetingRequestUseCase {
     private readonly counterProposalRepository: CounterProposalRepository,
     private readonly availabilityChecker: AvailabilityChecker,
     private readonly eventCreator: EventCreator,
+    private readonly eventPublisher: OutboxEventPublisher,
   ) {}
 
   async execute(meetingRequestId: string, actingUserId: string): Promise<AcceptMeetingRequestOutput> {
@@ -56,15 +59,23 @@ export class AcceptMeetingRequestUseCase {
       participantUserIds: allParties.filter((id) => id !== meetingRequest.requesterId),
     });
 
+    let updated: MeetingRequest;
     try {
-      const updated = await this.meetingRequestRepository.updateStatus(
-        meetingRequestId,
-        "ACCEPTED",
-        eventId,
-      );
-      return { meetingRequest: updated, eventId };
+      updated = await this.meetingRequestRepository.updateStatus(meetingRequestId, "ACCEPTED", eventId);
     } catch {
       throw new MeetingRequestConcurrentlyModifiedError();
     }
+
+    const payload: MeetingRequestAcceptedPayload = {
+      meetingRequestId: updated.id,
+      requesterId: updated.requesterId,
+      participantUserIds: updated.participantUserIds,
+      acceptedById: actingUserId,
+      eventId,
+      title: updated.title,
+    };
+    await this.eventPublisher.publish(MeetingRequestEventType.ACCEPTED, payload as unknown as Record<string, unknown>);
+
+    return { meetingRequest: updated, eventId };
   }
 }

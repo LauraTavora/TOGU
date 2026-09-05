@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { declineMeetingRequestSchema } from "@togu/schemas";
 import { createDeclineMeetingRequestUseCase } from "@/modules/meeting-requests";
+import { flushOutboxBestEffort } from "@/modules/notifications";
 import { requireAuth } from "@/shared/auth/require-auth";
 import { apiError } from "@/shared/http/api-error";
 import { mapMeetingRequestError } from "@/shared/http/map-meeting-request-error";
@@ -20,6 +21,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
   try {
     const useCase = createDeclineMeetingRequestUseCase();
     const meetingRequest = await useCase.execute(params.id, auth.userId, parsed.data.message);
+    await flushOutboxBestEffort();
     return NextResponse.json({ meetingRequest });
   } catch (error) {
     const mapped = mapMeetingRequestError(error);

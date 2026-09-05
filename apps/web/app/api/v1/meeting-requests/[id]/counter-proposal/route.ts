@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { counterProposeSchema } from "@togu/schemas";
 import { createCounterProposeUseCase } from "@/modules/meeting-requests";
+import { flushOutboxBestEffort } from "@/modules/notifications";
 import { requireAuth } from "@/shared/auth/require-auth";
 import { apiError } from "@/shared/http/api-error";
 import { mapMeetingRequestError } from "@/shared/http/map-meeting-request-error";
@@ -26,6 +27,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
       endAt: new Date(parsed.data.endAt),
       message: parsed.data.message,
     });
+    await flushOutboxBestEffort();
     return NextResponse.json({ counterProposal }, { status: 201 });
   } catch (error) {
     const mapped = mapMeetingRequestError(error);

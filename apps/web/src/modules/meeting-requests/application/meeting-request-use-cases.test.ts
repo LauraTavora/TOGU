@@ -16,28 +16,32 @@ import { InMemoryMeetingRequestRepository } from "../adapters/in-memory-meeting-
 import { InMemoryCounterProposalRepository } from "../adapters/in-memory-counter-proposal-repository";
 import { StubAvailabilityChecker } from "../adapters/stub-availability-checker";
 import { StubEventCreator } from "../adapters/stub-event-creator";
+import { InMemoryOutboxRepository } from "@/shared/outbox/in-memory-outbox-repository";
 
 function buildScenario() {
   const meetingRequestRepository = new InMemoryMeetingRequestRepository();
   const counterProposalRepository = new InMemoryCounterProposalRepository();
   const availabilityChecker = new StubAvailabilityChecker("AVAILABLE");
   const eventCreator = new StubEventCreator();
+  const outbox = new InMemoryOutboxRepository();
 
   return {
     meetingRequestRepository,
     counterProposalRepository,
     availabilityChecker,
     eventCreator,
-    createRequest: new CreateMeetingRequestUseCase(meetingRequestRepository),
+    outbox,
+    createRequest: new CreateMeetingRequestUseCase(meetingRequestRepository, outbox),
     accept: new AcceptMeetingRequestUseCase(
       meetingRequestRepository,
       counterProposalRepository,
       availabilityChecker,
       eventCreator,
+      outbox,
     ),
-    decline: new DeclineMeetingRequestUseCase(meetingRequestRepository, counterProposalRepository),
-    counterPropose: new CounterProposeUseCase(meetingRequestRepository, counterProposalRepository),
-    cancel: new CancelMeetingRequestUseCase(meetingRequestRepository),
+    decline: new DeclineMeetingRequestUseCase(meetingRequestRepository, counterProposalRepository, outbox),
+    counterPropose: new CounterProposeUseCase(meetingRequestRepository, counterProposalRepository, outbox),
+    cancel: new CancelMeetingRequestUseCase(meetingRequestRepository, outbox),
   };
 }
 
@@ -84,6 +88,9 @@ describe("AcceptMeetingRequestUseCase", () => {
     expect(result.meetingRequest.resolvedEventId).toBe(result.eventId);
     expect(scenario.eventCreator.calls).toHaveLength(1);
     expect(scenario.eventCreator.calls[0]?.participantUserIds).toEqual(["joao"]);
+
+    const events = scenario.outbox.events.map((e) => e.type);
+    expect(events).toEqual(["MEETING_REQUEST_CREATED", "MEETING_REQUEST_ACCEPTED"]);
   });
 
   it("bloqueia o requester de aceitar sua própria solicitação inicial", async () => {

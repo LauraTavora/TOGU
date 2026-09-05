@@ -5,6 +5,7 @@ import {
   createListReceivedMeetingRequestsUseCase,
   createListSentMeetingRequestsUseCase,
 } from "@/modules/meeting-requests";
+import { flushOutboxBestEffort } from "@/modules/notifications";
 import { requireAuth } from "@/shared/auth/require-auth";
 import { apiError } from "@/shared/http/api-error";
 
@@ -61,6 +62,7 @@ export async function POST(request: Request) {
       onlineLink: parsed.data.onlineLink,
       participantUserIds: parsed.data.participantUserIds,
     });
+    await flushOutboxBestEffort();
     return NextResponse.json({ meetingRequest }, { status: 201 });
   } catch (error) {
     return apiError(400, "invalid_input", error instanceof Error ? error.message : "Erro desconhecido.");

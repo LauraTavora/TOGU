@@ -3,6 +3,7 @@ import { ListReceivedMeetingRequestsUseCase, ListSentMeetingRequestsUseCase } fr
 import { CreateMeetingRequestUseCase } from "./create-meeting-request.use-case";
 import { InMemoryMeetingRequestRepository } from "../adapters/in-memory-meeting-request-repository";
 import { StubPriorityRanker } from "../adapters/stub-priority-ranker";
+import { InMemoryOutboxRepository } from "@/shared/outbox/in-memory-outbox-repository";
 
 async function createRequestAt(
   createRequest: CreateMeetingRequestUseCase,
@@ -21,7 +22,7 @@ async function createRequestAt(
 describe("ListReceivedMeetingRequestsUseCase", () => {
   it("por padrão ordena por prioridade (maior score primeiro)", async () => {
     const repository = new InMemoryMeetingRequestRepository();
-    const createRequest = new CreateMeetingRequestUseCase(repository);
+    const createRequest = new CreateMeetingRequestUseCase(repository, new InMemoryOutboxRepository());
 
     await createRequestAt(createRequest, "pouco-prioritario", ["ana"]);
     await createRequestAt(createRequest, "muito-prioritario", ["ana"]);
@@ -35,7 +36,7 @@ describe("ListReceivedMeetingRequestsUseCase", () => {
 
   it("com sort=recent ignora prioridade e mantém a ordem do repositório (mais recente primeiro)", async () => {
     const repository = new InMemoryMeetingRequestRepository();
-    const createRequest = new CreateMeetingRequestUseCase(repository);
+    const createRequest = new CreateMeetingRequestUseCase(repository, new InMemoryOutboxRepository());
 
     const first = await createRequestAt(createRequest, "muito-prioritario", ["ana"]);
     const second = await createRequestAt(createRequest, "pouco-prioritario", ["ana"]);
@@ -51,7 +52,7 @@ describe("ListReceivedMeetingRequestsUseCase", () => {
 describe("ListSentMeetingRequestsUseCase", () => {
   it("lista apenas solicitações enviadas pelo usuário", async () => {
     const repository = new InMemoryMeetingRequestRepository();
-    const createRequest = new CreateMeetingRequestUseCase(repository);
+    const createRequest = new CreateMeetingRequestUseCase(repository, new InMemoryOutboxRepository());
     await createRequestAt(createRequest, "ana", ["joao"]);
     await createRequestAt(createRequest, "joao", ["ana"]);
 
