@@ -26,3 +26,7 @@ Todas as mudanças relevantes deste projeto são documentadas aqui. Formato base
 - ADR-007 documenta a estratégia de negociação e concorrência.
 - Modelo Prisma `MeetingRequest` ganhou `declineMessage`.
 - 34 novos testes (domínio de negociação, casos de uso, condição de corrida, segurança de rota), totalizando 124 testes (+1 marcado como integração, pendente de banco real).
+- Módulo `priority` completo: `PriorityEngine` (domínio puro), CRUD de regras (`PERSON`/`CIRCLE`/`PLACE`/`EVENT_TYPE` × `LOW`/`NORMAL`/`HIGH`/`MAXIMUM`), sempre privado ao próprio usuário. Endpoints `GET/POST /api/v1/priority/rules`, `DELETE /api/v1/priority/rules/:targetType/:targetId`.
+- `GET /api/v1/meeting-requests?box=received` agora ordena por prioridade por padrão (`sort=priority`), calculada via círculos em comum e regras do destinatário; `sort=recent` mantém a ordem cronológica.
+- ADR-008 documenta o design do Priority Engine.
+- 15 novos testes (domínio do engine, casos de uso, ordenação, segurança de rota), totalizando 139 testes.

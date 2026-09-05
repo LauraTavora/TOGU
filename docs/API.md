@@ -27,13 +27,21 @@ Detalhamento da estratégia (JWT de acesso + refresh token opaco rotativo) em `d
 ### Solicitações de encontro (módulo `meeting-requests`)
 ```text
 POST /api/v1/meeting-requests
-GET  /api/v1/meeting-requests?box=received|sent&status=...
+GET  /api/v1/meeting-requests?box=received|sent&status=...&sort=priority|recent
 POST /api/v1/meeting-requests/:id/accept
 POST /api/v1/meeting-requests/:id/decline
 POST /api/v1/meeting-requests/:id/counter-proposal
 POST /api/v1/meeting-requests/:id/cancel
 ```
-Somente quem não apresentou a proposta de horário em aberto (o requester na primeira oferta, ou o autor da última contraproposta) pode aceitar/negar/contrapropor. `accept` sempre revalida disponibilidade real antes de confirmar (nunca confia no estado exibido antes) e é protegido contra condição de corrida (ver `ADR-007`).
+Somente quem não apresentou a proposta de horário em aberto (o requester na primeira oferta, ou o autor da última contraproposta) pode aceitar/negar/contrapropor. `accept` sempre revalida disponibilidade real antes de confirmar (nunca confia no estado exibido antes) e é protegido contra condição de corrida (ver `ADR-007`). `box=received` é ordenado por prioridade por padrão (`sort=priority`), usando o Priority Engine do destinatário (ver `ADR-008`); `sort=recent` ordena por data de criação, mais recente primeiro.
+
+### Prioridade (módulo `priority`)
+```text
+GET    /api/v1/priority/rules
+POST   /api/v1/priority/rules
+DELETE /api/v1/priority/rules/:targetType/:targetId
+```
+Regras são sempre privadas e escopadas ao próprio usuário — não há endpoint para consultar a prioridade que alguém atribuiu a outra pessoa (ver `ADR-008`). `targetType` é um de `PERSON`, `CIRCLE`, `PLACE`, `EVENT_TYPE`; `level` um de `LOW`, `NORMAL`, `HIGH`, `MAXIMUM`.
 
 ### Círculos (módulo `circles`)
 ```text

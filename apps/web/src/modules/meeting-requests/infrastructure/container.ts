@@ -12,11 +12,13 @@ import { PrismaMeetingRequestRepository } from "../adapters/prisma-meeting-reque
 import { PrismaCounterProposalRepository } from "../adapters/prisma-counter-proposal-repository";
 import { AvailabilityModuleChecker } from "../adapters/availability-module-checker";
 import { SchedulingModuleEventCreator } from "../adapters/scheduling-module-event-creator";
+import { PriorityModuleRanker } from "../adapters/priority-module-ranker";
 
 const meetingRequestRepository = new PrismaMeetingRequestRepository(prisma);
 const counterProposalRepository = new PrismaCounterProposalRepository(prisma);
 const availabilityChecker = new AvailabilityModuleChecker();
 const eventCreator = new SchedulingModuleEventCreator();
+const priorityRanker = new PriorityModuleRanker(prisma);
 
 export function createCreateMeetingRequestUseCase(): CreateMeetingRequestUseCase {
   return new CreateMeetingRequestUseCase(meetingRequestRepository);
@@ -44,7 +46,7 @@ export function createCancelMeetingRequestUseCase(): CancelMeetingRequestUseCase
 }
 
 export function createListReceivedMeetingRequestsUseCase(): ListReceivedMeetingRequestsUseCase {
-  return new ListReceivedMeetingRequestsUseCase(meetingRequestRepository);
+  return new ListReceivedMeetingRequestsUseCase(meetingRequestRepository, priorityRanker);
 }
 
 export function createListSentMeetingRequestsUseCase(): ListSentMeetingRequestsUseCase {

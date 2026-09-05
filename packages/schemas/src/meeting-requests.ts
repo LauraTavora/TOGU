@@ -37,5 +37,6 @@ export const meetingRequestStatusSchema = z.enum([
 export const listMeetingRequestsQuerySchema = z.object({
   box: z.enum(["received", "sent"]),
   status: meetingRequestStatusSchema.optional(),
+  sort: z.enum(["priority", "recent"]).optional(),
 });
 export type ListMeetingRequestsQuery = z.infer<typeof listMeetingRequestsQuerySchema>;
