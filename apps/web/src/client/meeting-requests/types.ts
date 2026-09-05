@@ -23,3 +23,13 @@ export interface MeetingRequestDto {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface CounterProposalDto {
+  id: string;
+  meetingRequestId: string;
+  proposedById: string;
+  startAt: string;
+  endAt: string;
+  message: string | null;
+  createdAt: string;
+}

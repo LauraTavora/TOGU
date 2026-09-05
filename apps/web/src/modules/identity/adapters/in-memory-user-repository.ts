@@ -15,6 +15,10 @@ export class InMemoryUserRepository implements UserRepository {
     return this.users.get(id) ?? null;
   }
 
+  async findManyByIds(ids: string[]): Promise<User[]> {
+    return ids.map((id) => this.users.get(id)).filter((user): user is User => user !== undefined);
+  }
+
   async create(input: CreateUserInput): Promise<User> {
     const user: User = {
       id: input.id,

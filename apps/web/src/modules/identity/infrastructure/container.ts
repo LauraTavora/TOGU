@@ -6,6 +6,7 @@ import { LogoutUseCase } from "../application/logout.use-case";
 import { RefreshSessionUseCase } from "../application/refresh-session.use-case";
 import { RequestPasswordResetUseCase } from "../application/request-password-reset.use-case";
 import { ResetPasswordUseCase } from "../application/reset-password.use-case";
+import { GetUsersPublicInfoUseCase } from "../application/get-users-public-info.use-case";
 import { PrismaUserRepository } from "../adapters/prisma-user-repository";
 import { PrismaSessionRepository } from "../adapters/prisma-session-repository";
 import { PrismaAuthTokenRepository } from "../adapters/prisma-auth-token-repository";
@@ -89,4 +90,8 @@ export function createResetPasswordUseCase(): ResetPasswordUseCase {
     sessionRepository,
     auditLogger,
   );
+}
+
+export function createGetUsersPublicInfoUseCase(): GetUsersPublicInfoUseCase {
+  return new GetUsersPublicInfoUseCase(userRepository);
 }

@@ -31,9 +31,16 @@ GET  /api/v1/meeting-requests?box=received|sent&status=...&sort=priority|recent
 POST /api/v1/meeting-requests/:id/accept
 POST /api/v1/meeting-requests/:id/decline
 POST /api/v1/meeting-requests/:id/counter-proposal
+GET  /api/v1/meeting-requests/:id/counter-proposals
 POST /api/v1/meeting-requests/:id/cancel
 ```
-Somente quem não apresentou a proposta de horário em aberto (o requester na primeira oferta, ou o autor da última contraproposta) pode aceitar/negar/contrapropor. `accept` sempre revalida disponibilidade real antes de confirmar (nunca confia no estado exibido antes) e é protegido contra condição de corrida (ver `ADR-007`). `box=received` é ordenado por prioridade por padrão (`sort=priority`), usando o Priority Engine do destinatário (ver `ADR-008`); `sort=recent` ordena por data de criação, mais recente primeiro.
+Somente quem não apresentou a proposta de horário em aberto (o requester na primeira oferta, ou o autor da última contraproposta) pode aceitar/negar/contrapropor. `accept` sempre revalida disponibilidade real antes de confirmar (nunca confia no estado exibido antes) e é protegido contra condição de corrida (ver `ADR-007`). `box=received` é ordenado por prioridade por padrão (`sort=priority`), usando o Priority Engine do destinatário (ver `ADR-008`); `sort=recent` ordena por data de criação, mais recente primeiro. `GET .../counter-proposals` lista o histórico de contrapropostas de uma solicitação (necessário para o cliente saber o horário renegociado quando `status=COUNTER_PROPOSED`); só quem faz parte da solicitação (requester ou participantes) pode ver — `403` para qualquer outra pessoa. Ver `ADR-016`.
+
+### Identidade pública (módulo `identity`)
+```text
+GET /api/v1/users?ids=id1,id2,id3
+```
+Resolve `{id, email}` para até 50 ids de uma vez — usado por telas que só têm ids de outros usuários (ex.: Central de Solicitações) e precisam mostrar "quem é" alguém. Nunca expõe `passwordHash` ou qualquer outro campo. Ainda não existe `Profile` (nome de exibição, foto); o e-mail é usado como identificador visível temporário — ver `ADR-016`.
 
 ### Notificações (módulo `notifications`)
 ```text
