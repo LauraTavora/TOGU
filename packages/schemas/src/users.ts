@@ -7,3 +7,8 @@ export const listUsersByIdsQuerySchema = z.object({
     .transform((value) => value.split(",").filter(Boolean)),
 });
 export type ListUsersByIdsQuery = z.infer<typeof listUsersByIdsQuerySchema>;
+
+export const findUserByEmailQuerySchema = z.object({
+  email: z.string().email(),
+});
+export type FindUserByEmailQuery = z.infer<typeof findUserByEmailQuerySchema>;
