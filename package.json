@@ -1,0 +1,23 @@
+{
+  "name": "togu",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TOGU — plataforma social de organização de tempo, encontros e experiências.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace apps/web",
+    "dev:mobile": "npm run start --workspace apps/mobile",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:integration": "npm run test:integration --workspaces --if-present",
+    "test:e2e": "npm run test:e2e --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

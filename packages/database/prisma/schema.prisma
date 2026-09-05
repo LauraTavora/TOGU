@@ -1,0 +1,607 @@
+// TOGU — Prisma schema
+// Reflete o ERD inicial documentado em docs/DATABASE.md.
+// Nenhuma regra de negócio vive aqui — apenas estrutura de persistência.
+// Os módulos de domínio (apps/web/src/modules/**) nunca importam este arquivo diretamente;
+// acessam dados via adapters que implementam os ports (ex.: AvailabilityRepository).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ---------- Identity ----------
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String?
+  emailVerified DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  profile         Profile?
+  memberships     Membership[]
+  sessions        Session[]
+  ownedCalendars  Calendar[]              @relation("CalendarOwner")
+  calendarGrants  CalendarPermission[]    @relation("CalendarPermissionGrantee")
+  eventParticipations EventParticipant[]
+  sentRequests    MeetingRequest[]        @relation("MeetingRequester")
+  meetingParticipations MeetingParticipant[]
+  circleMemberships CircleMember[]
+  priorityProfile PriorityProfile?
+  friendshipsA    Friendship[]            @relation("FriendshipUserA")
+  friendshipsB    Friendship[]            @relation("FriendshipUserB")
+  contacts        Contact[]               @relation("ContactOwner")
+  notifications   Notification[]
+  notificationPreference NotificationPreference?
+  externalCalendarAccounts ExternalCalendarAccount[]
+  savedEvents     SavedEvent[]
+  invitesSent     Invite[]                @relation("InviteSender")
+  auditLogs       AuditLog[]
+
+  @@map("users")
+}
+
+model Profile {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  displayName  String
+  avatarUrl    String?
+  timezone     String   @default("UTC")
+  dayStartTime String   @default("08:00")
+  dayEndTime   String   @default("22:00")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("profiles")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  refreshTokenHash String @unique
+  expiresAt    DateTime
+  revokedAt    DateTime?
+  createdAt    DateTime @default(now())
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+// ---------- Multi-tenant ----------
+
+enum WorkspaceType {
+  PERSONAL
+  FAMILY
+  FRIENDS
+  TEAM
+  COMPANY
+  COMMUNITY
+}
+
+model Workspace {
+  id        String        @id @default(cuid())
+  name      String
+  type      WorkspaceType @default(PERSONAL)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  memberships   Membership[]
+  calendars     Calendar[]
+  circles       Circle[]
+  subscription  Subscription?
+  invites       Invite[]
+  auditLogs     AuditLog[]
+
+  @@map("workspaces")
+}
+
+enum MembershipRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+model Membership {
+  id          String         @id @default(cuid())
+  userId      String
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspaceId String
+  workspace   Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  role        MembershipRole @default(MEMBER)
+  createdAt   DateTime       @default(now())
+
+  @@unique([userId, workspaceId])
+  @@index([workspaceId])
+  @@map("memberships")
+}
+
+// ---------- Billing / Entitlements ----------
+
+enum PlanCode {
+  FREE
+  PLUS
+  CIRCLE
+  BUSINESS
+}
+
+model Plan {
+  id    String   @id @default(cuid())
+  code  PlanCode @unique
+  name  String
+
+  features     Feature[]
+  subscriptions Subscription[]
+
+  @@map("plans")
+}
+
+model Feature {
+  id     String @id @default(cuid())
+  key    String @unique // ex.: feature.ai_scheduler
+  planId String
+  plan   Plan   @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@map("features")
+}
+
+model Subscription {
+  id          String    @id @default(cuid())
+  workspaceId String    @unique
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  planId      String
+  plan        Plan      @relation(fields: [planId], references: [id])
+  startedAt   DateTime  @default(now())
+  cancelledAt DateTime?
+
+  entitlements Entitlement[]
+
+  @@map("subscriptions")
+}
+
+model Entitlement {
+  id             String       @id @default(cuid())
+  subscriptionId String
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  featureKey     String
+  limitValue     Int?
+
+  @@index([subscriptionId])
+  @@map("entitlements")
+}
+
+// ---------- Scheduling ----------
+
+model Calendar {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  ownerId     String
+  owner       User     @relation("CalendarOwner", fields: [ownerId], references: [id])
+  name        String
+  createdAt   DateTime @default(now())
+
+  permissions CalendarPermission[]
+  events      Event[]
+
+  @@index([workspaceId])
+  @@map("calendars")
+}
+
+enum CalendarPermissionLevel {
+  FREE_BUSY   // livre/ocupado/soft-hold apenas
+  DETAILS     // título, local, participantes
+}
+
+model CalendarPermission {
+  id         String                  @id @default(cuid())
+  calendarId String
+  calendar   Calendar                @relation(fields: [calendarId], references: [id], onDelete: Cascade)
+  granteeId  String
+  grantee    User                    @relation("CalendarPermissionGrantee", fields: [granteeId], references: [id], onDelete: Cascade)
+  level      CalendarPermissionLevel @default(FREE_BUSY)
+  createdAt  DateTime                @default(now())
+
+  @@unique([calendarId, granteeId])
+  @@map("calendar_permissions")
+}
+
+enum AvailabilityState {
+  AVAILABLE
+  SOFT_HOLD
+  BUSY
+  PRIVATE_BUSY
+}
+
+enum PrivacyLevel {
+  PRIVATE
+  BUSY_ONLY
+  CIRCLE
+  PARTICIPANTS
+  PUBLIC
+}
+
+enum MeetingKind {
+  IN_PERSON
+  ONLINE
+  HYBRID
+}
+
+model Event {
+  id                String            @id @default(cuid())
+  calendarId        String
+  calendar          Calendar          @relation(fields: [calendarId], references: [id], onDelete: Cascade)
+  title             String
+  notes             String?
+  startAt           DateTime
+  endAt             DateTime
+  availabilityState AvailabilityState @default(BUSY)
+  privacyLevel      PrivacyLevel      @default(BUSY_ONLY)
+  meetingKind       MeetingKind       @default(IN_PERSON)
+  location          String?
+  onlineLink        String?
+  softHoldExpiresAt DateTime?
+  bufferBeforeMin   Int               @default(0)
+  bufferAfterMin    Int               @default(0)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  participants EventParticipant[]
+  recurrence   EventRecurrence?
+  reminders    EventReminder[]
+
+  @@index([calendarId, startAt, endAt])
+  @@map("events")
+}
+
+model EventParticipant {
+  id       String @id @default(cuid())
+  eventId  String
+  event    Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+  @@map("event_participants")
+}
+
+enum RecurrenceFrequency {
+  DAILY
+  WEEKLY
+  BIWEEKLY
+  MONTHLY
+  CUSTOM
+}
+
+model EventRecurrence {
+  id        String              @id @default(cuid())
+  eventId   String              @unique
+  event     Event               @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  frequency RecurrenceFrequency
+  interval  Int                 @default(1)
+  until     DateTime?
+  rrule     String?             // regra customizada (RFC 5545) quando frequency = CUSTOM
+
+  @@map("event_recurrences")
+}
+
+model EventReminder {
+  id           String @id @default(cuid())
+  eventId      String
+  event        Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  minutesBefore Int
+
+  @@map("event_reminders")
+}
+
+// ---------- Meeting Requests / Negotiation ----------
+
+enum MeetingRequestStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  COUNTER_PROPOSED
+  CANCELLED
+  EXPIRED
+}
+
+model MeetingRequest {
+  id           String               @id @default(cuid())
+  requesterId  String
+  requester    User                 @relation("MeetingRequester", fields: [requesterId], references: [id])
+  title        String
+  message      String?
+  startAt      DateTime
+  endAt        DateTime
+  meetingKind  MeetingKind          @default(IN_PERSON)
+  location     String?
+  onlineLink   String?
+  status       MeetingRequestStatus @default(PENDING)
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  resolvedEventId String?
+
+  participants     MeetingParticipant[]
+  counterProposals CounterProposal[]
+
+  @@index([status, createdAt])
+  @@map("meeting_requests")
+}
+
+model MeetingParticipant {
+  id               String         @id @default(cuid())
+  meetingRequestId String
+  meetingRequest   MeetingRequest @relation(fields: [meetingRequestId], references: [id], onDelete: Cascade)
+  userId           String
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  respondedAt      DateTime?
+
+  @@unique([meetingRequestId, userId])
+  @@index([userId, meetingRequestId])
+  @@map("meeting_participants")
+}
+
+model CounterProposal {
+  id               String         @id @default(cuid())
+  meetingRequestId String
+  meetingRequest   MeetingRequest @relation(fields: [meetingRequestId], references: [id], onDelete: Cascade)
+  proposedById     String
+  startAt          DateTime
+  endAt            DateTime
+  message          String?
+  createdAt        DateTime       @default(now())
+
+  @@map("counter_proposals")
+}
+
+// ---------- Circles / Relationships ----------
+
+model Circle {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  createdAt   DateTime @default(now())
+
+  members CircleMember[]
+
+  @@index([workspaceId])
+  @@map("circles")
+}
+
+model CircleMember {
+  id       String @id @default(cuid())
+  circleId String
+  circle   Circle @relation(fields: [circleId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([circleId, userId])
+  @@map("circle_members")
+}
+
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+  BLOCKED
+}
+
+model Friendship {
+  id        String           @id @default(cuid())
+  userAId   String
+  userA     User             @relation("FriendshipUserA", fields: [userAId], references: [id], onDelete: Cascade)
+  userBId   String
+  userB     User             @relation("FriendshipUserB", fields: [userBId], references: [id], onDelete: Cascade)
+  status    FriendshipStatus @default(PENDING)
+  createdAt DateTime         @default(now())
+
+  @@unique([userAId, userBId])
+  @@map("friendships")
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  ownerId   String
+  owner     User     @relation("ContactOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  name      String
+  email     String?
+  phone     String?
+  createdAt DateTime @default(now())
+
+  @@map("contacts")
+}
+
+// ---------- Priority (privado) ----------
+
+enum PriorityTargetType {
+  PERSON
+  CIRCLE
+  PLACE
+  EVENT_TYPE
+}
+
+enum PriorityLevel {
+  LOW
+  NORMAL
+  HIGH
+  MAXIMUM
+}
+
+model PriorityProfile {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  rules PriorityRule[]
+
+  @@map("priority_profiles")
+}
+
+model PriorityRule {
+  id                String             @id @default(cuid())
+  priorityProfileId String
+  priorityProfile   PriorityProfile    @relation(fields: [priorityProfileId], references: [id], onDelete: Cascade)
+  targetType        PriorityTargetType
+  targetId          String
+  level             PriorityLevel      @default(NORMAL)
+
+  @@unique([priorityProfileId, targetType, targetId])
+  @@map("priority_rules")
+}
+
+// ---------- Notifications ----------
+
+enum NotificationType {
+  NEW_REQUEST
+  REQUEST_ACCEPTED
+  REQUEST_DECLINED
+  COUNTER_PROPOSAL
+  EVENT_UPDATED
+  EVENT_CANCELLED
+  REMINDER
+  CONFLICT
+  INVITE
+  NEARBY_EVENT
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  payload   Json
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  @@index([userId, readAt])
+  @@map("notifications")
+}
+
+model NotificationPreference {
+  id           String  @id @default(cuid())
+  userId       String  @unique
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  inApp        Boolean @default(true)
+  push         Boolean @default(true)
+  email        Boolean @default(true)
+  webPush      Boolean @default(false)
+
+  @@map("notification_preferences")
+}
+
+// ---------- Integrations ----------
+
+enum ExternalCalendarProviderType {
+  GOOGLE
+  MICROSOFT
+  ICS
+}
+
+model ExternalCalendarAccount {
+  id                  String                        @id @default(cuid())
+  userId              String
+  user                User                          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider            ExternalCalendarProviderType
+  accessTokenEncrypted  String
+  refreshTokenEncrypted String?
+  expiresAt           DateTime?
+  createdAt           DateTime                      @default(now())
+
+  calendars ExternalCalendar[]
+
+  @@map("external_calendar_accounts")
+}
+
+model ExternalCalendar {
+  id                        String                  @id @default(cuid())
+  externalCalendarAccountId String
+  externalCalendarAccount   ExternalCalendarAccount @relation(fields: [externalCalendarAccountId], references: [id], onDelete: Cascade)
+  externalId                String
+  name                      String
+  syncEnabled               Boolean                 @default(true)
+
+  @@map("external_calendars")
+}
+
+// ---------- Discovery ----------
+
+model NearbyEvent {
+  id           String   @id @default(cuid())
+  providerRef  String   @unique // referência no EventDiscoveryProvider
+  title        String
+  category     String
+  startAt      DateTime
+  latitude     Float
+  longitude    Float
+  priceInfo    String?
+  createdAt    DateTime @default(now())
+
+  savedBy SavedEvent[]
+
+  @@map("nearby_events")
+}
+
+model SavedEvent {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nearbyEventId String
+  nearbyEvent   NearbyEvent @relation(fields: [nearbyEventId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+
+  @@unique([userId, nearbyEventId])
+  @@map("saved_events")
+}
+
+// ---------- Invites ----------
+
+model Invite {
+  id          String    @id @default(cuid())
+  workspaceId String?
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  senderId    String
+  sender      User      @relation("InviteSender", fields: [senderId], references: [id])
+  tokenHash   String    @unique
+  expiresAt   DateTime
+  revokedAt   DateTime?
+  acceptedAt  DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@map("invites")
+}
+
+// ---------- Audit ----------
+
+enum AuditAction {
+  LOGIN
+  PASSWORD_CHANGED
+  CALENDAR_CONNECTED
+  EVENT_CREATED
+  EVENT_UPDATED
+  EVENT_DELETED
+  REQUEST_ACCEPTED
+  REQUEST_REJECTED
+  PERMISSION_CHANGED
+  ACCOUNT_DELETED
+}
+
+model AuditLog {
+  id          String      @id @default(cuid())
+  workspaceId String?
+  workspace   Workspace?  @relation(fields: [workspaceId], references: [id], onDelete: SetNull)
+  actorId     String?
+  actor       User?       @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  action      AuditAction
+  metadata    Json?
+  createdAt   DateTime    @default(now())
+
+  @@index([workspaceId, createdAt])
+  @@map("audit_logs")
+}

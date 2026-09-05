@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "TOGU",
+    "slug": "togu",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "backgroundColor": "#F7F8FB"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "app.togu.mobile"
+    },
+    "android": {
+      "package": "app.togu.mobile"
+    }
+  }
+}
