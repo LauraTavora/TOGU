@@ -17,6 +17,7 @@ import { InMemoryCounterProposalRepository } from "../adapters/in-memory-counter
 import { StubAvailabilityChecker } from "../adapters/stub-availability-checker";
 import { StubEventCreator } from "../adapters/stub-event-creator";
 import { InMemoryOutboxRepository } from "@/shared/outbox/in-memory-outbox-repository";
+import { InMemoryAuditLogger } from "@/shared/audit/in-memory-audit-logger";
 
 function buildScenario() {
   const meetingRequestRepository = new InMemoryMeetingRequestRepository();
@@ -24,6 +25,7 @@ function buildScenario() {
   const availabilityChecker = new StubAvailabilityChecker("AVAILABLE");
   const eventCreator = new StubEventCreator();
   const outbox = new InMemoryOutboxRepository();
+  const auditLogger = new InMemoryAuditLogger();
 
   return {
     meetingRequestRepository,
@@ -31,6 +33,7 @@ function buildScenario() {
     availabilityChecker,
     eventCreator,
     outbox,
+    auditLogger,
     createRequest: new CreateMeetingRequestUseCase(meetingRequestRepository, outbox),
     accept: new AcceptMeetingRequestUseCase(
       meetingRequestRepository,
@@ -38,8 +41,14 @@ function buildScenario() {
       availabilityChecker,
       eventCreator,
       outbox,
+      auditLogger,
     ),
-    decline: new DeclineMeetingRequestUseCase(meetingRequestRepository, counterProposalRepository, outbox),
+    decline: new DeclineMeetingRequestUseCase(
+      meetingRequestRepository,
+      counterProposalRepository,
+      outbox,
+      auditLogger,
+    ),
     counterPropose: new CounterProposeUseCase(meetingRequestRepository, counterProposalRepository, outbox),
     cancel: new CancelMeetingRequestUseCase(meetingRequestRepository, outbox),
   };
@@ -91,6 +100,14 @@ describe("AcceptMeetingRequestUseCase", () => {
 
     const events = scenario.outbox.events.map((e) => e.type);
     expect(events).toEqual(["MEETING_REQUEST_CREATED", "MEETING_REQUEST_ACCEPTED"]);
+
+    expect(scenario.auditLogger.entries).toEqual([
+      {
+        action: "REQUEST_ACCEPTED",
+        actorId: "joao",
+        metadata: { meetingRequestId: request.id, eventId: result.eventId },
+      },
+    ]);
   });
 
   it("bloqueia o requester de aceitar sua própria solicitação inicial", async () => {
@@ -169,6 +186,10 @@ describe("DeclineMeetingRequestUseCase", () => {
     const declined = await scenario.decline.execute(request.id, "joao", "Não consigo nesse horário.");
     expect(declined.status).toBe("DECLINED");
     expect(declined.declineMessage).toBe("Não consigo nesse horário.");
+
+    expect(scenario.auditLogger.entries).toEqual([
+      { action: "REQUEST_REJECTED", actorId: "joao", metadata: { meetingRequestId: request.id } },
+    ]);
   });
 
   it("permite negar sem mensagem", async () => {

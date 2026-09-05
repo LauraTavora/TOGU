@@ -6,12 +6,14 @@ import type { CounterProposalRepository } from "../ports/counter-proposal-reposi
 import { MeetingRequestConcurrentlyModifiedError, MeetingRequestNotFoundError } from "./errors";
 import type { OutboxEventPublisher } from "@/shared/outbox";
 import { MeetingRequestEventType, type MeetingRequestDeclinedPayload } from "@/shared/outbox/events/meeting-request-events";
+import type { AuditLogger } from "@/shared/audit";
 
 export class DeclineMeetingRequestUseCase {
   constructor(
     private readonly meetingRequestRepository: MeetingRequestRepository,
     private readonly counterProposalRepository: CounterProposalRepository,
     private readonly eventPublisher: OutboxEventPublisher,
+    private readonly auditLogger: AuditLogger,
   ) {}
 
   async execute(
@@ -51,6 +53,12 @@ export class DeclineMeetingRequestUseCase {
       title: updated.title,
     };
     await this.eventPublisher.publish(MeetingRequestEventType.DECLINED, payload as unknown as Record<string, unknown>);
+
+    await this.auditLogger.record({
+      action: "REQUEST_REJECTED",
+      actorId: actingUserId,
+      metadata: { meetingRequestId: updated.id },
+    });
 
     return updated;
   }

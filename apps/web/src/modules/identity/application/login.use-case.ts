@@ -5,6 +5,7 @@ import type { SessionRepository } from "../ports/session-repository";
 import type { PasswordHasher } from "../ports/password-hasher";
 import type { OpaqueTokenGenerator } from "../ports/opaque-token-generator";
 import type { AccessTokenSigner } from "../ports/access-token-signer";
+import type { AuditLogger } from "@/shared/audit";
 
 export class InvalidCredentialsError extends Error {
   constructor() {
@@ -31,6 +32,7 @@ export class LoginUseCase {
     private readonly passwordHasher: PasswordHasher,
     private readonly tokenGenerator: OpaqueTokenGenerator,
     private readonly accessTokenSigner: AccessTokenSigner,
+    private readonly auditLogger: AuditLogger,
   ) {}
 
   async execute(input: LoginInput): Promise<LoginOutput> {
@@ -55,6 +57,8 @@ export class LoginUseCase {
     });
 
     const accessToken = await this.accessTokenSigner.sign({ userId: user.id });
+
+    await this.auditLogger.record({ action: "LOGIN", actorId: user.id });
 
     return { accessToken, refreshToken: refresh.token, refreshTokenExpiresAt };
   }

@@ -3,6 +3,7 @@ import type { AvailabilityState, Event, MeetingKind, PrivacyLevel } from "../dom
 import type { EventRepository } from "../ports/event-repository";
 import type { CalendarRepository } from "../ports/calendar-repository";
 import { EventNotFoundError, ForbiddenEventAccessError } from "./errors";
+import type { AuditLogger } from "@/shared/audit";
 
 export interface UpdateEventInput {
   title?: string | undefined;
@@ -22,6 +23,7 @@ export class UpdateEventUseCase {
   constructor(
     private readonly eventRepository: EventRepository,
     private readonly calendarRepository: CalendarRepository,
+    private readonly auditLogger: AuditLogger,
   ) {}
 
   async execute(eventId: string, requesterUserId: string, patch: UpdateEventInput): Promise<Event> {
@@ -39,6 +41,14 @@ export class UpdateEventUseCase {
     const nextEndAt = patch.endAt ?? event.endAt;
     assertValidEventTimeRange(nextStartAt, nextEndAt);
 
-    return this.eventRepository.update(eventId, patch);
+    const updated = await this.eventRepository.update(eventId, patch);
+
+    await this.auditLogger.record({
+      action: "EVENT_UPDATED",
+      actorId: requesterUserId,
+      metadata: { eventId },
+    });
+
+    return updated;
   }
 }

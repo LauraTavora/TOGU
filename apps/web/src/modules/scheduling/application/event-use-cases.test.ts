@@ -8,20 +8,23 @@ import { EventNotFoundError, ForbiddenEventAccessError, PersonalCalendarNotFound
 import { InvalidEventTimeRangeError } from "../domain/event-time";
 import { InMemoryEventRepository } from "../adapters/in-memory-event-repository";
 import { InMemoryCalendarRepository } from "../adapters/in-memory-calendar-repository";
+import { InMemoryAuditLogger } from "@/shared/audit/in-memory-audit-logger";
 
 function buildScenario() {
   const eventRepository = new InMemoryEventRepository();
   const calendarRepository = new InMemoryCalendarRepository();
   calendarRepository.registerPersonalCalendar("ana", "calendar-ana");
   calendarRepository.registerPersonalCalendar("joao", "calendar-joao");
+  const auditLogger = new InMemoryAuditLogger();
 
   return {
     eventRepository,
     calendarRepository,
-    createEvent: new CreateEventUseCase(eventRepository, calendarRepository),
+    auditLogger,
+    createEvent: new CreateEventUseCase(eventRepository, calendarRepository, auditLogger),
     getEvent: new GetEventUseCase(eventRepository, calendarRepository),
-    updateEvent: new UpdateEventUseCase(eventRepository, calendarRepository),
-    deleteEvent: new DeleteEventUseCase(eventRepository, calendarRepository),
+    updateEvent: new UpdateEventUseCase(eventRepository, calendarRepository, auditLogger),
+    deleteEvent: new DeleteEventUseCase(eventRepository, calendarRepository, auditLogger),
     listCalendar: new ListCalendarEventsUseCase(eventRepository, calendarRepository),
   };
 }
@@ -259,5 +262,26 @@ describe("ListCalendarEventsUseCase", () => {
 
     expect(joaoEvents).toHaveLength(1);
     expect(joaoEvents[0]?.title).toBe("Jantar com João");
+  });
+});
+
+describe("Auditoria (docs/SECURITY.md §Auditoria)", () => {
+  it("registra EVENT_CREATED, EVENT_UPDATED e EVENT_DELETED", async () => {
+    const { createEvent, updateEvent, deleteEvent, auditLogger } = buildScenario();
+
+    const event = await createEvent.execute({
+      ownerUserId: "ana",
+      title: "Jantar",
+      startAt: new Date("2026-01-10T20:00:00Z"),
+      endAt: new Date("2026-01-10T22:00:00Z"),
+    });
+    await updateEvent.execute(event.id, "ana", { title: "Jantar especial" });
+    await deleteEvent.execute(event.id, "ana");
+
+    expect(auditLogger.entries).toEqual([
+      { action: "EVENT_CREATED", actorId: "ana", metadata: { eventId: event.id } },
+      { action: "EVENT_UPDATED", actorId: "ana", metadata: { eventId: event.id } },
+      { action: "EVENT_DELETED", actorId: "ana", metadata: { eventId: event.id } },
+    ]);
   });
 });

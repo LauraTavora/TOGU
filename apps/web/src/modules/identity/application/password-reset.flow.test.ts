@@ -8,6 +8,7 @@ import { InMemorySessionRepository } from "../adapters/in-memory-session-reposit
 import { BcryptPasswordHasher } from "../adapters/bcrypt-password-hasher";
 import { CryptoOpaqueTokenGenerator } from "../adapters/crypto-opaque-token-generator";
 import type { EmailProvider } from "../ports/email-provider";
+import { InMemoryAuditLogger } from "@/shared/audit/in-memory-audit-logger";
 
 class CapturingEmailProvider implements EmailProvider {
   lastPasswordResetToken: string | null = null;
@@ -26,6 +27,7 @@ async function buildScenario() {
   const passwordHasher = new BcryptPasswordHasher();
   const tokenGenerator = new CryptoOpaqueTokenGenerator();
   const emailProvider = new CapturingEmailProvider();
+  const auditLogger = new InMemoryAuditLogger();
 
   const passwordHash = await passwordHasher.hash("SenhaAntiga1");
   const user = await userRepository.create({
@@ -53,6 +55,7 @@ async function buildScenario() {
     tokenGenerator,
     passwordHasher,
     sessionRepository,
+    auditLogger,
   );
 
   return {
@@ -63,6 +66,7 @@ async function buildScenario() {
     resetUseCase,
     emailProvider,
     passwordHasher,
+    auditLogger,
   };
 }
 
@@ -73,8 +77,16 @@ describe("Fluxo de redefinição de senha", () => {
   });
 
   it("permite redefinir a senha com token válido e revoga sessões ativas", async () => {
-    const { user, userRepository, sessionRepository, requestUseCase, resetUseCase, emailProvider, passwordHasher } =
-      await buildScenario();
+    const {
+      user,
+      userRepository,
+      sessionRepository,
+      requestUseCase,
+      resetUseCase,
+      emailProvider,
+      passwordHasher,
+      auditLogger,
+    } = await buildScenario();
 
     await requestUseCase.execute("ana@example.com");
     const rawToken = emailProvider.lastPasswordResetToken;
@@ -88,6 +100,8 @@ describe("Fluxo de redefinição de senha", () => {
 
     const session = await sessionRepository.findByRefreshTokenHash("some-active-session-hash");
     expect(session?.revokedAt).not.toBeNull();
+
+    expect(auditLogger.entries).toEqual([{ action: "PASSWORD_CHANGED", actorId: user.id }]);
 
     // Token de reset não pode ser reutilizado.
     await expect(
