@@ -5,7 +5,7 @@ describe("GET /api/v1/discovery/events/:id/circle-interest — sem autenticaçã
   it("rejeita sem login", async () => {
     const response = await GET(
       new Request("http://localhost/api/v1/discovery/events/some-id/circle-interest"),
-      { params: { id: "some-id" } },
+      { params: Promise.resolve({ id: "some-id" }) },
     );
     expect(response.status).toBe(401);
   });

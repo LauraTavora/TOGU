@@ -2,8 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Tokens de cor em triplas "R G B" (sem vírgulas) — formato exigido por
+ * rgb(var(--x) / <alpha-value>) no tailwind.config.ts. Espelham
+ * packages/design-system/src/tokens/colors.ts; ao alterar um lado,
+ * atualizar o outro.
+ */
+:root {
+  --color-primary: 102 92 246;
+  --color-secondary: 35 191 167;
+  --color-warning-soft-hold: 242 184 75;
+  --color-danger-conflict: 239 100 97;
+  --color-background: 247 248 251;
+  --color-surface: 255 255 255;
+  --color-surface-hover: 241 242 246;
+  --color-border: 229 231 235;
+  --color-text-primary: 23 24 28;
+  --color-text-secondary: 113 113 122;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --color-primary: 139 130 255;
+    --color-secondary: 63 223 196;
+    --color-warning-soft-hold: 245 197 107;
+    --color-danger-conflict: 242 131 125;
+    --color-background: 17 18 20;
+    --color-surface: 27 28 32;
+    --color-surface-hover: 35 36 41;
+    --color-border: 46 47 54;
+    --color-text-primary: 247 248 251;
+    --color-text-secondary: 161 161 170;
+
+    color-scheme: dark;
+  }
+}
+
+/* Alternância manual futura (Configurações → Aparência) via classe no <html>. */
+:root.dark {
+  --color-primary: 139 130 255;
+  --color-secondary: 63 223 196;
+  --color-warning-soft-hold: 245 197 107;
+  --color-danger-conflict: 242 131 125;
+  --color-background: 17 18 20;
+  --color-surface: 27 28 32;
+  --color-surface-hover: 35 36 41;
+  --color-border: 46 47 54;
+  --color-text-primary: 247 248 251;
+  --color-text-secondary: 161 161 170;
+
+  color-scheme: dark;
+}
+
 html,
 body {
-  background-color: theme("colors.background");
-  color: theme("colors.text-primary");
+  background-color: rgb(var(--color-background));
+  color: rgb(var(--color-text-primary));
+}
+
+* {
+  border-color: rgb(var(--color-border));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

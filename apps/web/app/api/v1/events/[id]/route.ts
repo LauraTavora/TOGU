@@ -10,20 +10,18 @@ import {
 } from "@/modules/scheduling";
 import { requireAuth } from "@/shared/auth/require-auth";
 import { apiError } from "@/shared/http/api-error";
+import type { RouteParams } from "@/shared/http/route-params";
 
-interface RouteParams {
-  params: { id: string };
-}
-
-export async function GET(request: Request, { params }: RouteParams) {
+export async function GET(request: Request, { params }: RouteParams<{ id: string }>) {
   const auth = await requireAuth(request);
   if (!auth) {
     return apiError(401, "unauthorized", "Autenticação necessária.");
   }
+  const { id } = await params;
 
   try {
     const useCase = createGetEventUseCase();
-    const event = await useCase.execute(params.id, auth.userId);
+    const event = await useCase.execute(id, auth.userId);
     return NextResponse.json({ event });
   } catch (error) {
     if (error instanceof EventNotFoundError) {
@@ -36,11 +34,12 @@ export async function GET(request: Request, { params }: RouteParams) {
   }
 }
 
-export async function PATCH(request: Request, { params }: RouteParams) {
+export async function PATCH(request: Request, { params }: RouteParams<{ id: string }>) {
   const auth = await requireAuth(request);
   if (!auth) {
     return apiError(401, "unauthorized", "Autenticação necessária.");
   }
+  const { id } = await params;
 
   const body = await request.json().catch(() => null);
   const parsed = updateEventRequestSchema.safeParse(body);
@@ -50,7 +49,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
   try {
     const useCase = createUpdateEventUseCase();
-    const event = await useCase.execute(params.id, auth.userId, {
+    const event = await useCase.execute(id, auth.userId, {
       title: parsed.data.title,
       notes: parsed.data.notes,
       startAt: parsed.data.startAt ? new Date(parsed.data.startAt) : undefined,
@@ -78,15 +77,16 @@ export async function PATCH(request: Request, { params }: RouteParams) {
   }
 }
 
-export async function DELETE(request: Request, { params }: RouteParams) {
+export async function DELETE(request: Request, { params }: RouteParams<{ id: string }>) {
   const auth = await requireAuth(request);
   if (!auth) {
     return apiError(401, "unauthorized", "Autenticação necessária.");
   }
+  const { id } = await params;
 
   try {
     const useCase = createDeleteEventUseCase();
-    await useCase.execute(params.id, auth.userId);
+    await useCase.execute(id, auth.userId);
     return NextResponse.json({ ok: true });
   } catch (error) {
     if (error instanceof EventNotFoundError) {

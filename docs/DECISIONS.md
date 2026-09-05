@@ -16,5 +16,6 @@
 | [ADR-010](adr/ADR-010-discovery-module.md) | Módulo Discovery (Explore) | Aceito |
 | [ADR-011](adr/ADR-011-rate-limiting.md) | Rate limiting | Aceito |
 | [ADR-012](adr/ADR-012-audit-logging.md) | Auditoria | Aceito |
+| [ADR-013](adr/ADR-013-web-ui-foundation.md) | Fundação da UI web (Design System, SDK e autenticação) | Aceito |
 
 Novas ADRs devem seguir o padrão `ADR-XXX-titulo-curto.md` com seções: Status, Contexto, Decisão, Consequências.
