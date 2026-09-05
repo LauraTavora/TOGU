@@ -15,6 +15,7 @@
     "@togu/design-system": "0.1.0",
     "@togu/schemas": "0.1.0",
     "@togu/sdk": "0.1.0",
+    "@upstash/redis": "^1.38.4",
     "bcryptjs": "^2.4.3",
     "jose": "^5.9.6",
     "next": "^15.0.0",

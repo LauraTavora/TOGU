@@ -20,6 +20,8 @@ import { BcryptPasswordHasher } from "../adapters/bcrypt-password-hasher";
 import { CryptoOpaqueTokenGenerator } from "../adapters/crypto-opaque-token-generator";
 import { JoseAccessTokenSigner } from "../adapters/jose-access-token-signer";
 import { ConsoleEmailProvider } from "../adapters/console-email-provider";
+import { ResendEmailProvider } from "../adapters/resend-email-provider";
+import type { EmailProvider } from "../ports/email-provider";
 import { getAuditLogger } from "@/shared/audit";
 
 function getAuthSecret(): string {
@@ -36,7 +38,32 @@ const authTokenRepository = new PrismaAuthTokenRepository(prisma);
 const workspaceProvisioner = new PrismaWorkspaceProvisioner(prisma);
 const passwordHasher = new BcryptPasswordHasher();
 const tokenGenerator = new CryptoOpaqueTokenGenerator();
-const emailProvider = new ConsoleEmailProvider();
+
+/**
+ * Usa Resend de verdade quando EMAIL_PROVIDER_API_KEY está configurado;
+ * cai para o log no console (desenvolvimento) caso contrário. Em
+ * produção sem a chave configurada, avisa uma vez — ninguém recebe
+ * e-mail de verificação/reset de senha nesse estado. Ver ADR-023.
+ */
+function buildEmailProvider(): EmailProvider {
+  const apiKey = process.env.EMAIL_PROVIDER_API_KEY;
+  if (apiKey) {
+    const fromAddress = process.env.EMAIL_FROM ?? "no-reply@togu.app";
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+    return new ResendEmailProvider(apiKey, fromAddress, appUrl);
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    console.warn(
+      "[identity] EMAIL_PROVIDER_API_KEY não configurado — e-mails de verificação/reset de senha " +
+        "só aparecem no log do servidor, ninguém realmente os recebe (ver ADR-023).",
+    );
+  }
+
+  return new ConsoleEmailProvider();
+}
+
+const emailProvider = buildEmailProvider();
 const auditLogger = getAuditLogger();
 
 export function getAccessTokenSigner(): JoseAccessTokenSigner {
