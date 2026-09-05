@@ -75,6 +75,24 @@ model Session {
   @@map("sessions")
 }
 
+enum AuthTokenPurpose {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+}
+
+model AuthToken {
+  id         String           @id @default(cuid())
+  userId     String
+  purpose    AuthTokenPurpose
+  tokenHash  String           @unique
+  expiresAt  DateTime
+  usedAt     DateTime?
+  createdAt  DateTime         @default(now())
+
+  @@index([userId, purpose])
+  @@map("auth_tokens")
+}
+
 // ---------- Multi-tenant ----------
 
 enum WorkspaceType {

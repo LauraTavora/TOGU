@@ -9,5 +9,6 @@
 | [ADR-003](adr/ADR-003-neon-postgres.md) | PostgreSQL via Neon em produção | Aceito |
 | [ADR-004](adr/ADR-004-notification-architecture.md) | Notificações via Transactional Outbox | Aceito |
 | [ADR-005](adr/ADR-005-calendar-integration.md) | Estratégia de integração com calendários externos | Aceito |
+| [ADR-006](adr/ADR-006-authentication-strategy.md) | Estratégia de autenticação | Aceito |
 
 Novas ADRs devem seguir o padrão `ADR-XXX-titulo-curto.md` com seções: Status, Contexto, Decisão, Consequências.

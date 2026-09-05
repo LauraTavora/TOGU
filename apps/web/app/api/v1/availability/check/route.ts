@@ -1,16 +1,20 @@
 import { NextResponse } from "next/server";
 import { checkAvailabilityRequestSchema } from "@togu/schemas";
 import { createCheckAvailabilityUseCase } from "@/modules/availability/infrastructure/container";
+import { requireAuth } from "@/shared/auth/require-auth";
+import { apiError } from "@/shared/http/api-error";
 
 export async function POST(request: Request) {
+  const auth = await requireAuth(request);
+  if (!auth) {
+    return apiError(401, "unauthorized", "Autenticação necessária.");
+  }
+
   const body = await request.json().catch(() => null);
   const parsed = checkAvailabilityRequestSchema.safeParse(body);
 
   if (!parsed.success) {
-    return NextResponse.json(
-      { error: { code: "invalid_input", message: parsed.error.message } },
-      { status: 400 },
-    );
+    return apiError(400, "invalid_input", parsed.error.message);
   }
 
   const { participantIds, start, end, bufferMinutes } = parsed.data;

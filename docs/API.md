@@ -11,6 +11,19 @@ API versionada sob `/api/v1/`. Route Handlers atuam apenas como adapters de entr
 
 ## Endpoints iniciais
 
+### Autenticação (módulo `identity`)
+```text
+POST /api/v1/auth/register
+POST /api/v1/auth/login
+POST /api/v1/auth/logout
+POST /api/v1/auth/refresh
+POST /api/v1/auth/verify-email
+POST /api/v1/auth/password-reset/request
+POST /api/v1/auth/password-reset/confirm
+GET  /api/v1/auth/me
+```
+Detalhamento da estratégia (JWT de acesso + refresh token opaco rotativo) em `docs/adr/ADR-006-authentication-strategy.md`.
+
 ### Eventos
 ```text
 POST /api/v1/events
@@ -53,6 +66,16 @@ Erros possíveis
 Regras de negócio executadas (casos de uso invocados)
 Serviços/ports envolvidos
 ```
+
+### Exemplo: `POST /api/v1/auth/login`
+
+- **Objetivo:** autenticar um usuário com e-mail e senha, iniciando uma sessão.
+- **Autorização:** nenhuma (rota pública).
+- **Entrada:** `{ email, password }`.
+- **Saída:** `{ accessToken }` (JWT, 15 min) + cookie `HttpOnly` com refresh token (30 dias, escopado a `/api/v1/auth`).
+- **Erros:** `400 invalid_input`, `401 invalid_credentials` (mensagem genérica — nunca revela se o e-mail existe).
+- **Regras executadas:** `LoginUseCase` — verifica hash de senha (bcrypt), cria `Session`, assina access token.
+- **Ports envolvidos:** `UserRepository`, `SessionRepository`, `PasswordHasher`, `OpaqueTokenGenerator`, `AccessTokenSigner`.
 
 ### Exemplo: `POST /api/v1/meeting-requests/:id/accept`
 
