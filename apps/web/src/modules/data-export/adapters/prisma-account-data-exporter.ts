@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 import type { AccountDataExport, AccountDataExporter } from "../ports/account-data-exporter";
 
 export class PrismaAccountDataExporter implements AccountDataExporter {

@@ -1,12 +1,12 @@
-# TOGU
+# Fechô
 
 **Versão 1.0.0** (em desenvolvimento — ver `CHANGELOG.md`)
 
 > Seu tempo. Suas pessoas. Juntos.
 
-## O que é o TOGU
+## O que é o Fechô
 
-TOGU é uma plataforma social de organização de tempo, encontros, compromissos e experiências — não apenas um calendário digital. Ela combina três elementos centrais: **Tempo + Pessoas + Prioridade**, permitindo que pessoas compartilhem disponibilidade (sem expor compromissos), encontrem horários em comum, negociem encontros e descubram eventos próximos alinhados à disponibilidade real de seus círculos sociais.
+Fechô é uma plataforma social de organização de tempo, encontros, compromissos e experiências — não apenas um calendário digital. Ela combina três elementos centrais: **Tempo + Pessoas + Prioridade**, permitindo que pessoas compartilhem disponibilidade (sem expor compromissos), encontrem horários em comum, negociem encontros e descubram eventos próximos alinhados à disponibilidade real de seus círculos sociais.
 
 Documentação completa de produto em [`docs/PRODUCT.md`](docs/PRODUCT.md).
 
@@ -24,12 +24,12 @@ Marcar algo com outra pessoa hoje exige um vaivém manual entre apps de mensagem
 - Smart Slots — sugestão automática dos melhores horários.
 - Explore — descoberta de eventos próximos por geolocalização e categoria.
 - Planejar Rolê — cruzamento de eventos com disponibilidade real do grupo.
-- Convites externos via link seguro para quem ainda não usa o TOGU.
+- Convites externos via link seguro para quem ainda não usa o Fechô.
 - Notificações multi-canal (in-app, push, e-mail; WhatsApp futuro).
 
 ## Arquitetura
 
-O TOGU usa **Arquitetura Hexagonal (Ports and Adapters)** de forma obrigatória: o domínio nunca conhece Next.js, React, Prisma, Neon, Vercel ou qualquer API externa — apenas entidades, Value Objects, regras e casos de uso, expostos via interfaces (ports) e implementados em adapters substituíveis.
+O Fechô usa **Arquitetura Hexagonal (Ports and Adapters)** de forma obrigatória: o domínio nunca conhece Next.js, React, Prisma, Neon, Vercel ou qualquer API externa — apenas entidades, Value Objects, regras e casos de uso, expostos via interfaces (ports) e implementados em adapters substituíveis.
 
 ```text
 src/modules/<modulo>/

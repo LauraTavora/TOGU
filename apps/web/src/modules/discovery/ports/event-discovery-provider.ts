@@ -6,7 +6,7 @@ export interface EventDiscoveryQuery {
 }
 
 /**
- * Port desacoplando o TOGU de qualquer provedor específico de eventos
+ * Port desacoplando o Fechô de qualquer provedor específico de eventos
  * (docs/PRODUCT.md §33). Nunca implementado via scraping — apenas
  * integrações autorizadas (ex.: Eventbrite, Sympla) no futuro. Por ora,
  * um adapter mock alimenta o catálogo local para desenvolvimento.

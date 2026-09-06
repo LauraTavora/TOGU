@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 import type {
   AuthTokenPurpose,
   AuthTokenRecord,

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { listCalendarQuerySchema } from "@togu/schemas";
+import { listCalendarQuerySchema } from "@fecho/schemas";
 import { createListCalendarEventsUseCase, PersonalCalendarNotFoundError } from "@/modules/scheduling";
 import { requireAuth } from "@/shared/auth/require-auth";
 import { apiError } from "@/shared/http/api-error";

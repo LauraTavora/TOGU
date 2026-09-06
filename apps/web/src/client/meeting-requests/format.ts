@@ -1,4 +1,4 @@
-import type { BadgeTone, StatusKind } from "@togu/design-system";
+import type { BadgeTone, StatusKind } from "@fecho/design-system";
 import type { MeetingRequestDto, MeetingRequestStatus } from "./types";
 
 export const STATUS_LABEL: Record<MeetingRequestStatus, string> = {

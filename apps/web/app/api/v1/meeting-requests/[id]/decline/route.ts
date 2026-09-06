@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { declineMeetingRequestSchema } from "@togu/schemas";
+import { declineMeetingRequestSchema } from "@fecho/schemas";
 import { createDeclineMeetingRequestUseCase } from "@/modules/meeting-requests";
 import { flushOutboxBestEffort } from "@/modules/notifications";
 import { requireAuth } from "@/shared/auth/require-auth";

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@togu/design-system";
+import { cn } from "@fecho/design-system";
 import { NAV_ITEMS } from "./nav-items";
 
 export function Sidebar() {
@@ -10,7 +10,7 @@ export function Sidebar() {
 
   return (
     <aside className="hidden w-60 shrink-0 flex-col border-r border-border bg-surface p-4 md:flex">
-      <div className="mb-6 px-2 text-lg font-semibold text-text-primary">TOGU</div>
+      <div className="mb-6 px-2 text-lg font-semibold text-text-primary">Fechô</div>
       <nav className="flex flex-col gap-1" aria-label="Navegação principal">
         {NAV_ITEMS.map((item) => {
           const active = pathname === item.href || pathname.startsWith(`${item.href}/`);

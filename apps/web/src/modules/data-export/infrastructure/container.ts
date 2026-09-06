@@ -1,4 +1,4 @@
-import { prisma } from "@togu/database";
+import { prisma } from "@fecho/database";
 import { ExportAccountDataUseCase } from "../application/export-account-data.use-case";
 import { PrismaAccountDataExporter } from "../adapters/prisma-account-data-exporter";
 

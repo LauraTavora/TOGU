@@ -1,4 +1,4 @@
-# TOGU — Security
+# Fechô — Security
 
 Segurança tratada como requisito funcional: **Security by Design** e **Privacy by Design**.
 

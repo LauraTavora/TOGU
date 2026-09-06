@@ -1,4 +1,4 @@
-import { prisma } from "@togu/database";
+import { prisma } from "@fecho/database";
 import { RegisterUserUseCase } from "../application/register-user.use-case";
 import { VerifyEmailUseCase } from "../application/verify-email.use-case";
 import { LoginUseCase } from "../application/login.use-case";
@@ -49,7 +49,7 @@ const tokenGenerator = new CryptoOpaqueTokenGenerator();
 function buildEmailProvider(): EmailProvider {
   const apiKey = process.env.EMAIL_PROVIDER_API_KEY;
   if (apiKey) {
-    const fromAddress = process.env.EMAIL_FROM ?? "no-reply@togu.app";
+    const fromAddress = process.env.EMAIL_FROM ?? "no-reply@fecho.app";
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
     return new ResendEmailProvider(apiKey, fromAddress, appUrl);
   }

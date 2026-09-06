@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { KeyboardEvent } from "react";
-import { Card, EmptyState, Input, Skeleton, cn } from "@togu/design-system";
-import { ApiError } from "@togu/sdk";
+import { Card, EmptyState, Input, Skeleton, cn } from "@fecho/design-system";
+import { ApiError } from "@fecho/sdk";
 import { useAuth } from "@/client/auth/auth-provider";
 import { EventCard } from "@/client/discovery/event-card";
 import { CATEGORY_LABEL, EVENT_CATEGORIES } from "@/client/discovery/format";

@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Badge, Button, Card, Skeleton, cn } from "@togu/design-system";
-import { ApiError } from "@togu/sdk";
+import { Badge, Button, Card, Skeleton, cn } from "@fecho/design-system";
+import { ApiError } from "@fecho/sdk";
 import { useAuth } from "@/client/auth/auth-provider";
 import { PRIORITY_LEVEL_LABEL, PRIORITY_TARGET_TYPE_LABEL } from "@/client/settings/format";
 import { PriorityRuleFormDialog } from "@/client/settings/priority-rule-form-dialog";
@@ -112,7 +112,7 @@ export default function ConfiguracoesPage() {
         `/api/v1/users?email=${encodeURIComponent(rawTargetId)}`,
       );
       if (!user) {
-        throw new Error("Não encontramos ninguém no TOGU com esse e-mail.");
+        throw new Error("Não encontramos ninguém no Fechô com esse e-mail.");
       }
       targetId = user.id;
     }
@@ -138,7 +138,7 @@ export default function ConfiguracoesPage() {
     setPrivacyError(null);
     setIsExporting(true);
     try {
-      await http.download("/api/v1/account/export", `togu-dados-${userId}.json`);
+      await http.download("/api/v1/account/export", `fecho-dados-${userId}.json`);
     } catch (err) {
       setPrivacyError(err instanceof ApiError ? err.message : "Não foi possível exportar seus dados.");
     } finally {

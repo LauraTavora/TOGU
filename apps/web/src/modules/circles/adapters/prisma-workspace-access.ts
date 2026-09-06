@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 import type { WorkspaceAccess } from "../ports/workspace-access";
 
 export class PrismaWorkspaceAccess implements WorkspaceAccess {

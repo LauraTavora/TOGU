@@ -21,7 +21,7 @@ export async function GET(request: Request) {
     status: 200,
     headers: {
       "Content-Type": "application/json",
-      "Content-Disposition": `attachment; filename="togu-dados-${auth.userId}.json"`,
+      "Content-Disposition": `attachment; filename="fecho-dados-${auth.userId}.json"`,
     },
   });
 }

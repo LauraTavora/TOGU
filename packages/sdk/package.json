@@ -1,5 +1,5 @@
 {
-  "name": "@togu/sdk",
+  "name": "@fecho/sdk",
   "version": "0.1.0",
   "private": true,
   "main": "src/index.ts",
@@ -8,6 +8,6 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@togu/schemas": "0.1.0"
+    "@fecho/schemas": "0.1.0"
   }
 }

@@ -1,4 +1,4 @@
-import { prisma } from "@togu/database";
+import { prisma } from "@fecho/database";
 import { getOutboxRepository } from "@/shared/outbox";
 import { ListNotificationsUseCase, CountUnreadNotificationsUseCase } from "../application/list-notifications.use-case";
 import { MarkNotificationReadUseCase, MarkAllNotificationsReadUseCase } from "../application/mark-notification-read.use-case";

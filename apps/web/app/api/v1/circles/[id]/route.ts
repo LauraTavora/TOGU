@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { renameCircleRequestSchema } from "@togu/schemas";
+import { renameCircleRequestSchema } from "@fecho/schemas";
 import {
   createRenameCircleUseCase,
   createDeleteCircleUseCase,

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
-import { Button, Dialog, Textarea } from "@togu/design-system";
+import { Button, Dialog, Textarea } from "@fecho/design-system";
 
 export interface DeclineDialogProps {
   open: boolean;

@@ -98,7 +98,7 @@ describe("Fluxo de exclusão de conta (LGPD)", () => {
     expect(result.processedCount).toBe(1);
 
     const anonymized = await userRepository.findById(user.id);
-    expect(anonymized?.email).toBe(`deleted-${user.id}@togu.invalid`);
+    expect(anonymized?.email).toBe(`deleted-${user.id}@fecho.invalid`);
     expect(anonymized?.passwordHash).toBe("");
     expect(anonymized?.deletionRequestedAt).toBeNull();
 

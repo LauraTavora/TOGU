@@ -1,4 +1,4 @@
-# TOGU — Deployment
+# Fechô — Deployment
 
 ## Web
 Deploy final: **Vercel**.

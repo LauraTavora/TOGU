@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { ApiError } from "@togu/sdk";
+import { ApiError } from "@fecho/sdk";
 import { useAuth } from "@/client/auth/auth-provider";
 import { AuthLayout } from "@/client/auth/auth-layout";
 

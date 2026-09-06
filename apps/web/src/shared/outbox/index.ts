@@ -1,4 +1,4 @@
-import { prisma } from "@togu/database";
+import { prisma } from "@fecho/database";
 import { PrismaOutboxRepository } from "./prisma-outbox-repository";
 
 export type { OutboxEvent } from "./outbox-event";

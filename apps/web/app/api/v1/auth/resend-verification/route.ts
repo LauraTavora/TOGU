@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { resendVerificationEmailSchema } from "@togu/schemas";
+import { resendVerificationEmailSchema } from "@fecho/schemas";
 import { createResendVerificationEmailUseCase } from "@/modules/identity";
 import { apiError } from "@/shared/http/api-error";
 import { enforceRateLimit, getClientIp } from "@/shared/rate-limit";

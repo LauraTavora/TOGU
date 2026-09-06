@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createMeetingRequestSchema, listMeetingRequestsQuerySchema } from "@togu/schemas";
+import { createMeetingRequestSchema, listMeetingRequestsQuerySchema } from "@fecho/schemas";
 import {
   createCreateMeetingRequestUseCase,
   createListReceivedMeetingRequestsUseCase,

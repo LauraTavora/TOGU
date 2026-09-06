@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 import { DEFAULT_NOTIFICATION_PREFERENCE, type NotificationPreference } from "../domain/notification-preference";
 import type {
   NotificationPreferenceRepository,

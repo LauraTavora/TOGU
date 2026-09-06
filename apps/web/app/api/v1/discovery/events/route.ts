@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { searchNearbyEventsQuerySchema } from "@togu/schemas";
+import { searchNearbyEventsQuerySchema } from "@fecho/schemas";
 import { createSearchNearbyEventsUseCase } from "@/modules/discovery";
 import { requireAuth } from "@/shared/auth/require-auth";
 import { apiError } from "@/shared/http/api-error";

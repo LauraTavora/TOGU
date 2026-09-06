@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { setPriorityRuleSchema } from "@togu/schemas";
+import { setPriorityRuleSchema } from "@fecho/schemas";
 import { createListPriorityRulesUseCase, createSetPriorityRuleUseCase } from "@/modules/priority";
 import { requireAuth } from "@/shared/auth/require-auth";
 import { apiError } from "@/shared/http/api-error";

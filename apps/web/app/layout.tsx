@@ -12,7 +12,7 @@ import { AuthProvider } from "@/client/auth/auth-provider";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "TOGU",
+  title: "Fechô",
   description: "Seu tempo. Suas pessoas. Juntos.",
 };
 

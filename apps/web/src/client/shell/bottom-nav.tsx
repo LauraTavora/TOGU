@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@togu/design-system";
+import { cn } from "@fecho/design-system";
 import type { ComponentType, SVGProps } from "react";
 import { CalendarIcon, CompassIcon, HomeIcon, InboxIcon, PlusIcon } from "./icons";
 

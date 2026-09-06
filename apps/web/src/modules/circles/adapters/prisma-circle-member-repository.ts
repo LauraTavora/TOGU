@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { Prisma, type PrismaClient } from "@togu/database";
+import { Prisma, type PrismaClient } from "@fecho/database";
 import type { CircleMember } from "../domain/circle";
 import {
   MemberAlreadyInCircleError,

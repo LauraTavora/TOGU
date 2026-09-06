@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Badge, Card, EmptyState, Skeleton, StatusIndicator } from "@togu/design-system";
-import { ApiError } from "@togu/sdk";
+import { Badge, Card, EmptyState, Skeleton, StatusIndicator } from "@fecho/design-system";
+import { ApiError } from "@fecho/sdk";
 import { useAuth } from "@/client/auth/auth-provider";
 import { toStatusKind } from "@/client/scheduling/status";
 import type { CalendarEventDto } from "@/client/scheduling/types";

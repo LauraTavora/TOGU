@@ -1,4 +1,4 @@
-# TOGU — Database
+# Fechô — Database
 
 PostgreSQL. Desenvolvimento local via Postgres local; produção obrigatoriamente **Neon PostgreSQL**. ORM: Prisma (padrão), salvo ADR justificando alternativa.
 

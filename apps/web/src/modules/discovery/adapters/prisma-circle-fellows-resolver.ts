@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 import type { CircleFellowsResolver } from "../ports/circle-fellows-resolver";
 
 export class PrismaCircleFellowsResolver implements CircleFellowsResolver {

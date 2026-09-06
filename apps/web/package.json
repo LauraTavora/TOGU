@@ -1,5 +1,5 @@
 {
-  "name": "@togu/web",
+  "name": "@fecho/web",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -12,10 +12,10 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@togu/database": "0.1.0",
-    "@togu/design-system": "0.1.0",
-    "@togu/schemas": "0.1.0",
-    "@togu/sdk": "0.1.0",
+    "@fecho/database": "0.1.0",
+    "@fecho/design-system": "0.1.0",
+    "@fecho/schemas": "0.1.0",
+    "@fecho/sdk": "0.1.0",
     "@upstash/redis": "^1.38.4",
     "bcryptjs": "^2.4.3",
     "jose": "^5.9.6",

@@ -1,4 +1,4 @@
-import { prisma } from "@togu/database";
+import { prisma } from "@fecho/database";
 import { getAuditLogger } from "@/shared/audit";
 import { CreateEventUseCase } from "../application/create-event.use-case";
 import { GetEventUseCase } from "../application/get-event.use-case";

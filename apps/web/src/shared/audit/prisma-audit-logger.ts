@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { PrismaClient, Prisma } from "@togu/database";
+import type { PrismaClient, Prisma } from "@fecho/database";
 import type { AuditEntry, AuditLogger } from "./audit-logger";
 
 /**

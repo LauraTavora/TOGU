@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
-import { Button, Dialog, Input, cn } from "@togu/design-system";
+import { Button, Dialog, Input, cn } from "@fecho/design-system";
 import { PRIORITY_LEVEL_LABEL, PRIORITY_TARGET_TYPE_LABEL } from "./format";
 import type { PriorityLevel, PriorityTargetType } from "./types";
 
@@ -101,7 +101,7 @@ export function PriorityRuleFormDialog({ open, onClose, circles, onSubmit }: Pri
             label="E-mail da pessoa"
             type="email"
             required
-            hint="A pessoa precisa já ter uma conta no TOGU."
+            hint="A pessoa precisa já ter uma conta no Fechô."
             value={personEmail}
             onChange={(e) => setPersonEmail(e.target.value)}
           />

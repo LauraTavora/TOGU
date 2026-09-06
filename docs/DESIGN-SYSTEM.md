@@ -1,4 +1,4 @@
-# TOGU — Design System
+# Fechô — Design System
 
 Pacote: `packages/design-system`. Tokens centralizados — nunca espalhados diretamente pelos componentes.
 

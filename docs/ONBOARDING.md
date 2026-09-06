@@ -1,10 +1,10 @@
-# TOGU — Onboarding
+# Fechô — Onboarding
 
 ## Fluxo de primeiro acesso
 
 Perguntas apresentadas de forma progressiva (não um formulário longo único):
 
-1. Como gostaria de usar o TOGU?
+1. Como gostaria de usar o Fechô?
 2. Quais dias normalmente estão disponíveis?
 3. Horário normal de início e fim do dia.
 4. Qual timezone?

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Badge, Button, Card, StatusIndicator } from "@togu/design-system";
-import type { StatusKind } from "@togu/design-system";
+import { Badge, Button, Card, StatusIndicator } from "@fecho/design-system";
+import type { StatusKind } from "@fecho/design-system";
 import {
   OWN_AVAILABILITY_LABEL,
   STATUS_LABEL,

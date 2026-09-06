@@ -1,4 +1,4 @@
-# TOGU — Decisions Index
+# Fechô — Decisions Index
 
 Índice de Architecture Decision Records. Toda decisão arquitetural importante gera uma nova ADR em `docs/adr/`.
 

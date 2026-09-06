@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 import type { Session } from "../domain/session";
 import type { CreateSessionInput, SessionRepository } from "../ports/session-repository";
 

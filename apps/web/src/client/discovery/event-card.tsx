@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Badge, Button, Card } from "@togu/design-system";
+import { Badge, Button, Card } from "@fecho/design-system";
 import { CATEGORY_LABEL, formatDistance, formatEventDateTime, formatPrice } from "./format";
 import type { NearbyEventDto, NearbyEventWithDistanceDto } from "./types";
 

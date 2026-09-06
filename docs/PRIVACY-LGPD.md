@@ -1,4 +1,4 @@
-# TOGU — Privacidade e LGPD
+# Fechô — Privacidade e LGPD
 
 ## Princípio central
 **Ter acesso à disponibilidade de alguém não significa ter acesso aos compromissos dessa pessoa.** Por padrão, terceiros veem apenas `Available | Soft Hold | Busy` — nunca título, local, participantes ou descrição, salvo permissão explícita concedida individualmente ou por Circle.
@@ -26,7 +26,7 @@
 - Ao apagar conta: e-mail e senha são anonimizados (a linha de `User` continua existindo — necessário para não quebrar calendários/solicitações/convites que outras pessoas ainda enxergam, ver ADR-022); dados pessoais em outros módulos (prioridades, eventos salvos, contatos, círculos, preferências) ainda não têm purga automática — gap conhecido e documentado, não uma anonimização completa hoje.
 
 ## Papéis
-- Controlador: TOGU (operador da plataforma).
+- Controlador: Fechô (operador da plataforma).
 - Encarregado (DPO): a definir antes do lançamento comercial.
 
 Ver fluxos técnicos de suporte em `SECURITY.md` e `THREAT-MODEL.md`.

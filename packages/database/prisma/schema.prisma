@@ -1,4 +1,4 @@
-// TOGU — Prisma schema
+// Fechô — Prisma schema
 // Reflete o ERD inicial documentado em docs/DATABASE.md.
 // Nenhuma regra de negócio vive aqui — apenas estrutura de persistência.
 // Os módulos de domínio (apps/web/src/modules/**) nunca importam este arquivo diretamente;

@@ -1,4 +1,4 @@
-import type { StatusKind } from "@togu/design-system";
+import type { StatusKind } from "@fecho/design-system";
 import type { AvailabilityState } from "./types";
 
 export function toStatusKind(state: AvailabilityState): StatusKind {

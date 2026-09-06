@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 import type { User } from "../domain/user";
 import type { CreateUserInput, UserRepository } from "../ports/user-repository";
 

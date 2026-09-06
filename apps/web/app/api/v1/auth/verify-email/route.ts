@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { verifyEmailRequestSchema } from "@togu/schemas";
+import { verifyEmailRequestSchema } from "@fecho/schemas";
 import { createVerifyEmailUseCase, InvalidOrExpiredTokenError } from "@/modules/identity";
 import { apiError } from "@/shared/http/api-error";
 

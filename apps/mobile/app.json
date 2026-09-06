@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "TOGU",
-    "slug": "togu",
+    "name": "Fechô",
+    "slug": "fecho",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
@@ -12,10 +12,10 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "app.togu.mobile"
+      "bundleIdentifier": "app.fecho.mobile"
     },
     "android": {
-      "package": "app.togu.mobile"
+      "package": "app.fecho.mobile"
     }
   }
 }

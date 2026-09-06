@@ -1,4 +1,4 @@
-import { prisma } from "@togu/database";
+import { prisma } from "@fecho/database";
 import { SyncNearbyEventsUseCase } from "../application/sync-nearby-events.use-case";
 import { SearchNearbyEventsUseCase } from "../application/search-nearby-events.use-case";
 import { SaveEventUseCase, UnsaveEventUseCase, ListSavedEventsUseCase } from "../application/saved-events.use-case";

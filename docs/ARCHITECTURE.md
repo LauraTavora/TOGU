@@ -1,4 +1,4 @@
-# TOGU — Architecture
+# Fechô — Architecture
 
 ## 1. Princípio central: Arquitetura Hexagonal (Ports and Adapters)
 

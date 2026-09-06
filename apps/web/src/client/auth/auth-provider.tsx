@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
-import { createAuthApi, createHttpClient, type AuthApi, type HttpClient } from "@togu/sdk";
+import { createAuthApi, createHttpClient, type AuthApi, type HttpClient } from "@fecho/sdk";
 
 export type AuthStatus = "loading" | "authenticated" | "unauthenticated";
 

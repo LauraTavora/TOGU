@@ -1,4 +1,4 @@
-# TOGU — Threat Model
+# Fechô — Threat Model
 
 Metodologia: STRIDE aplicado aos fluxos críticos do domínio.
 

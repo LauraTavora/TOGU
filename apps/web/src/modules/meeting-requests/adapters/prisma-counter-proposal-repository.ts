@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 import type { CounterProposal } from "../domain/counter-proposal";
 import type {
   CounterProposalRepository,

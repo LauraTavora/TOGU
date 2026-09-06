@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 import type { Circle } from "../domain/circle";
 import type { CircleRepository, CreateCircleInput } from "../ports/circle-repository";
 

@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Button, Skeleton, cn } from "@togu/design-system";
-import { ApiError } from "@togu/sdk";
+import { Button, Skeleton, cn } from "@fecho/design-system";
+import { ApiError } from "@fecho/sdk";
 import { useAuth } from "@/client/auth/auth-provider";
 import { AgendaList } from "@/client/scheduling/agenda-list";
 import { WeekGrid } from "@/client/scheduling/week-grid";

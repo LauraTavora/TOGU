@@ -18,8 +18,8 @@ export class ResendEmailProvider implements EmailProvider {
     const verifyUrl = `${this.appUrl}/verificar-email?token=${encodeURIComponent(token)}`;
     await this.send(
       to,
-      "Confirme seu e-mail no TOGU",
-      `<p>Falta pouco! Clique no link abaixo para confirmar sua conta no TOGU:</p>
+      "Confirme seu e-mail no Fechô",
+      `<p>Falta pouco! Clique no link abaixo para confirmar sua conta no Fechô:</p>
        <p><a href="${verifyUrl}">${verifyUrl}</a></p>
        <p>Se você não criou uma conta, pode ignorar este e-mail.</p>`,
     );
@@ -29,7 +29,7 @@ export class ResendEmailProvider implements EmailProvider {
     const resetUrl = `${this.appUrl}/redefinir-senha?token=${encodeURIComponent(token)}`;
     await this.send(
       to,
-      "Redefinir sua senha no TOGU",
+      "Redefinir sua senha no Fechô",
       `<p>Recebemos um pedido para redefinir sua senha. Clique no link abaixo:</p>
        <p><a href="${resetUrl}">${resetUrl}</a></p>
        <p>Se você não pediu isso, pode ignorar este e-mail com segurança.</p>`,
