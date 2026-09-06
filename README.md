@@ -1,5 +1,7 @@
 # Fechô
 
+![Logo do Fechô](docs/assets/logo.png)
+
 **Versão 1.0.0** (em desenvolvimento — ver `CHANGELOG.md`)
 
 > Seu tempo. Suas pessoas. Juntos.
