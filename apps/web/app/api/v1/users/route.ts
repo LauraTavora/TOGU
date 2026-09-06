@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { findUserByEmailQuerySchema, listUsersByIdsQuerySchema } from "@togu/schemas";
+import { findUserByEmailQuerySchema, listUsersByIdsQuerySchema } from "@fecho/schemas";
 import { createFindUserByEmailUseCase, createGetUsersPublicInfoUseCase } from "@/modules/identity";
 import { requireAuth } from "@/shared/auth/require-auth";
 import { apiError } from "@/shared/http/api-error";

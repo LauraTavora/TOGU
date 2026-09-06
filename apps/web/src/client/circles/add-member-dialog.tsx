@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
-import { Button, Dialog, Input } from "@togu/design-system";
+import { Button, Dialog, Input } from "@fecho/design-system";
 
 export interface AddMemberDialogProps {
   open: boolean;
@@ -42,7 +42,7 @@ export function AddMemberDialog({ open, onClose, onAdd }: AddMemberDialogProps) 
           label="E-mail"
           type="email"
           required
-          hint="A pessoa precisa já ter uma conta no TOGU."
+          hint="A pessoa precisa já ter uma conta no Fechô."
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />

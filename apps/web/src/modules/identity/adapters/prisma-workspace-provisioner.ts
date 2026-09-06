@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 import type { WorkspaceProvisioner } from "../ports/workspace-provisioner";
 
 export class PrismaWorkspaceProvisioner implements WorkspaceProvisioner {

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { loginRequestSchema } from "@togu/schemas";
+import { loginRequestSchema } from "@fecho/schemas";
 import { createLoginUseCase, EmailNotVerifiedError, InvalidCredentialsError } from "@/modules/identity";
 import { apiError } from "@/shared/http/api-error";
 import { setRefreshCookie } from "@/shared/http/refresh-cookie";

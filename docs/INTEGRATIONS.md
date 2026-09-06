@@ -1,4 +1,4 @@
-# TOGU — Integrations
+# Fechô — Integrations
 
 Todas as integrações externas são isoladas via **ports** e implementadas como **adapters** substituíveis (Arquitetura Hexagonal, ver `ARCHITECTURE.md`).
 

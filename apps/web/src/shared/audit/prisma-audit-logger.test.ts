@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { PrismaAuditLogger } from "./prisma-audit-logger";
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 
 function fakePrisma(createImpl: (...args: unknown[]) => unknown): PrismaClient {
   return { auditLog: { create: vi.fn(createImpl) } } as unknown as PrismaClient;

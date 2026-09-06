@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Avatar, Button, Card, EmptyState, Skeleton } from "@togu/design-system";
-import { ApiError } from "@togu/sdk";
+import { Avatar, Button, Card, EmptyState, Skeleton } from "@fecho/design-system";
+import { ApiError } from "@fecho/sdk";
 import { useAuth } from "@/client/auth/auth-provider";
 import { CircleFormDialog } from "@/client/circles/circle-form-dialog";
 import { AddMemberDialog } from "@/client/circles/add-member-dialog";
@@ -108,7 +108,7 @@ export default function CirculosPage() {
       `/api/v1/users?email=${encodeURIComponent(email)}`,
     );
     if (!user) {
-      throw new Error("Não encontramos ninguém no TOGU com esse e-mail.");
+      throw new Error("Não encontramos ninguém no Fechô com esse e-mail.");
     }
     await http.request(`/api/v1/circles/${circleId}/members`, {
       method: "POST",

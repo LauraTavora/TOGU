@@ -1,4 +1,4 @@
-import { cn } from "@togu/design-system";
+import { cn } from "@fecho/design-system";
 import { addDays, fractionOfDay, formatDayLabel, isSameDay, HOURS } from "./date-utils";
 import type { AvailabilityState, CalendarEventDto } from "./types";
 

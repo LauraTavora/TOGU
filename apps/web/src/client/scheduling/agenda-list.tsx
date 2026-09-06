@@ -1,4 +1,4 @@
-import { Card, EmptyState, StatusIndicator } from "@togu/design-system";
+import { Card, EmptyState, StatusIndicator } from "@fecho/design-system";
 import { formatDayHeader, isSameDay } from "./date-utils";
 import { toStatusKind } from "./status";
 import type { CalendarEventDto } from "./types";

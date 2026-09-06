@@ -1,6 +1,6 @@
 import type { NextResponse } from "next/server";
 
-export const REFRESH_COOKIE_NAME = "togu_refresh_token";
+export const REFRESH_COOKIE_NAME = "fecho_refresh_token";
 
 export function setRefreshCookie(response: NextResponse, token: string, expiresAt: Date): void {
   response.cookies.set(REFRESH_COOKIE_NAME, token, {

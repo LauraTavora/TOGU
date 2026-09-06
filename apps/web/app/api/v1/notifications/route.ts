@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { listNotificationsQuerySchema } from "@togu/schemas";
+import { listNotificationsQuerySchema } from "@fecho/schemas";
 import { createListNotificationsUseCase } from "@/modules/notifications";
 import { requireAuth } from "@/shared/auth/require-auth";
 import { apiError } from "@/shared/http/api-error";

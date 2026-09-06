@@ -1,8 +1,8 @@
-# TOGU — Product Brief
+# Fechô — Product Brief
 
-## 1. O que é o TOGU
+## 1. O que é o Fechô
 
-TOGU é uma plataforma social de organização de tempo, encontros, compromissos e experiências. Não é "mais um calendário digital": é o ponto de encontro entre **tempo**, **pessoas** e **prioridade**.
+Fechô é uma plataforma social de organização de tempo, encontros, compromissos e experiências. Não é "mais um calendário digital": é o ponto de encontro entre **tempo**, **pessoas** e **prioridade**.
 
 > "Não apenas encontrar tempo livre. Encontrar tempo para estar com as pessoas e viver as coisas que realmente importam."
 
@@ -35,7 +35,7 @@ Hoje, marcar algo com outra pessoa exige um vaivém manual: perguntar disponibil
 6. Smart Slots — sugestão automática de melhores horários.
 7. Explore — descoberta de eventos próximos por geolocalização e categoria.
 8. Planejar Rolê — cruzamento de eventos + disponibilidade de um grupo.
-9. Convites externos (link seguro) para quem ainda não usa o TOGU.
+9. Convites externos (link seguro) para quem ainda não usa o Fechô.
 10. Notificações multi-canal (in-app, push, e-mail; WhatsApp futuro).
 11. Assistente de agenda (consulta em linguagem natural, nunca decide sozinho).
 
@@ -49,7 +49,7 @@ Hoje, marcar algo com outra pessoa exige um vaivém manual: perguntar disponibil
 ## 7. Riscos de produto
 
 - Complexidade percebida: mitigar com onboarding progressivo e Home enxuta.
-- Efeito de rede: TOGU só cria valor quando as pessoas ao redor também usam — mitigar com convites externos frictionless.
+- Efeito de rede: Fechô só cria valor quando as pessoas ao redor também usam — mitigar com convites externos frictionless.
 - Privacidade mal calibrada pode gerar desconfiança — regras de visibilidade precisam ser conservadoras por padrão.
 
 ## 8. Métricas
@@ -63,8 +63,8 @@ Ver `COMMERCIAL.md` §Personas (Ana, João, Marcela, Pedro).
 ## 10. User Journeys
 
 ### Journey A — Marcar um encontro com um amigo
-1. Ana abre o TOGU e toca em "Marcar algo com João" no perfil dele.
-2. TOGU consulta `AvailabilityEngine` e mostra horários em comum (🟢/🟡/🔴).
+1. Ana abre o Fechô e toca em "Marcar algo com João" no perfil dele.
+2. Fechô consulta `AvailabilityEngine` e mostra horários em comum (🟢/🟡/🔴).
 3. Ana escolhe sexta 20h, adiciona local, envia solicitação.
 4. João recebe notificação, vê seu próprio status (🟢 Livre) e aceita.
 5. Evento passa a existir nas agendas de ambos automaticamente.
@@ -72,19 +72,19 @@ Ver `COMMERCIAL.md` §Personas (Ana, João, Marcela, Pedro).
 ### Journey B — Negociar novo horário
 1. João recebe solicitação para sábado 18h, mas já tem um Soft Hold no horário.
 2. Nega explicando: "Talvez eu já tenha outro compromisso, mas posso sábado 21h."
-3. TOGU gera `CounterProposal`, preservando histórico da negociação.
+3. Fechô gera `CounterProposal`, preservando histórico da negociação.
 4. Ana aceita a contraproposta; evento confirmado no novo horário.
 
 ### Journey C — Descobrir e convidar para um evento (Planejar Rolê)
 1. Ana seleciona amigos, período (sábado à noite), distância e orçamento no fluxo "Criar Rolê".
-2. TOGU cruza eventos do Explore com disponibilidade real do grupo.
+2. Fechô cruza eventos do Explore com disponibilidade real do grupo.
 3. Resultado: "Festival X, sábado 20h, todos disponíveis."
 4. Ana convida o grupo; cada convidado vê seu próprio status de disponibilidade e aceita individualmente.
 
 ### Journey D — Convite externo
-1. Pedro (sem conta) recebe link `togu.app/invite/...`.
+1. Pedro (sem conta) recebe link `fecho.app/invite/...`.
 2. Visualiza o convite sem precisar criar conta.
-3. Aceita e, opcionalmente, cria conta para continuar usando o TOGU.
+3. Aceita e, opcionalmente, cria conta para continuar usando o Fechô.
 
 ## 11. Sitemap (alto nível)
 

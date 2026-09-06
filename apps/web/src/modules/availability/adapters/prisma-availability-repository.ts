@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 import type { BlockState, BusyBlock } from "../domain/busy-block";
 import type { TimeRange } from "../domain/time-range";
 import type { AvailabilityRepository } from "../ports/availability-repository";

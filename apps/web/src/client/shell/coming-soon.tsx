@@ -1,4 +1,4 @@
-import { EmptyState } from "@togu/design-system";
+import { EmptyState } from "@fecho/design-system";
 
 export function ComingSoon({ title, description }: { title: string; description: string }) {
   return (

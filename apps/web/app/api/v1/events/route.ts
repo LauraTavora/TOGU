@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createEventRequestSchema } from "@togu/schemas";
+import { createEventRequestSchema } from "@fecho/schemas";
 import {
   createCreateEventUseCase,
   InvalidEventTimeRangeError,

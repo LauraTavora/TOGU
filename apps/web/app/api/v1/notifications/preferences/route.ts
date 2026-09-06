@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { updateNotificationPreferencesSchema } from "@togu/schemas";
+import { updateNotificationPreferencesSchema } from "@fecho/schemas";
 import {
   createGetNotificationPreferencesUseCase,
   createUpdateNotificationPreferencesUseCase,

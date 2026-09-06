@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 import type { CalendarRepository } from "../ports/calendar-repository";
 
 export class PrismaCalendarRepository implements CalendarRepository {

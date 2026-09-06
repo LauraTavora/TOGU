@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 import { OPEN_STATUSES, type MeetingRequest, type MeetingRequestStatus } from "../domain/meeting-request";
 import type {
   CreateMeetingRequestInput,

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { checkAvailabilityRequestSchema } from "@togu/schemas";
+import { checkAvailabilityRequestSchema } from "@fecho/schemas";
 import { createCheckAvailabilityUseCase } from "@/modules/availability/infrastructure/container";
 import { requireAuth } from "@/shared/auth/require-auth";
 import { apiError } from "@/shared/http/api-error";

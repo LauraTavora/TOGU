@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { updateEventRequestSchema } from "@togu/schemas";
+import { updateEventRequestSchema } from "@fecho/schemas";
 import {
   createGetEventUseCase,
   createUpdateEventUseCase,

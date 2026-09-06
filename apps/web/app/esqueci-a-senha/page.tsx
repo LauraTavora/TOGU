@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import Link from "next/link";
-import { Button, Input } from "@togu/design-system";
+import { Button, Input } from "@fecho/design-system";
 import { useAuth } from "@/client/auth/auth-provider";
 import { GuestOnly } from "@/client/auth/require-auth";
 import { AuthLayout } from "@/client/auth/auth-layout";

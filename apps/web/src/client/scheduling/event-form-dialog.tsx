@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
-import { Button, Dialog, Input, Textarea } from "@togu/design-system";
+import { Button, Dialog, Input, Textarea } from "@fecho/design-system";
 import type { CalendarEventDto } from "./types";
 
 export interface EventFormValues {

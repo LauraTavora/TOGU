@@ -1,4 +1,4 @@
-# TOGU — Commercial
+# Fechô — Commercial
 
 ## Personas
 
@@ -12,7 +12,7 @@
 31 anos, trabalha em empresa com muitas reuniões, quer proteger tempo pessoal e social sem parecer indisponível. Quer: Private Busy, Soft Hold, buffers entre compromissos.
 
 ### 4. Pedro — o recém-chegado (convidado externo)
-Não usa TOGU ainda. Recebe um convite por link. Dor: não quer criar conta só para responder um convite. Quer: aceitar/negar rápido, decidir depois se cria conta.
+Não usa Fechô ainda. Recebe um convite por link. Dor: não quer criar conta só para responder um convite. Quer: aceitar/negar rápido, decidir depois se cria conta.
 
 ## Planos
 
@@ -26,7 +26,7 @@ Não usa TOGU ainda. Recebe um convite por link. Dor: não quer criar conta só 
 Controle de acesso via `Entitlements`/`Features`/`Limits` (ver `ARCHITECTURE.md` §Sistema de Planos) — nunca `if (plan === 'pro')` espalhado no código.
 
 ## Posicionamento
-"O calendário feito para acontecer." TOGU não compete diretamente com Google Calendar (infraestrutura de agenda) nem com Calendly (agendamento transacional) — compete pelo momento social de decidir e confirmar um encontro.
+"O calendário feito para acontecer." Fechô não compete diretamente com Google Calendar (infraestrutura de agenda) nem com Calendly (agendamento transacional) — compete pelo momento social de decidir e confirmar um encontro.
 
 ## Canais
 - Boca a boca / convites virais via link externo seguro.

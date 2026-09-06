@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 import { createComputePriorityScoreUseCase } from "../../priority";
 import type { PriorityRanker, PriorityRankableRequest } from "../ports/priority-ranker";
 

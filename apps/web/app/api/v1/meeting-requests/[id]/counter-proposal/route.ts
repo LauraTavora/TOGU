@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { counterProposeSchema } from "@togu/schemas";
+import { counterProposeSchema } from "@fecho/schemas";
 import { createCounterProposeUseCase } from "@/modules/meeting-requests";
 import { flushOutboxBestEffort } from "@/modules/notifications";
 import { requireAuth } from "@/shared/auth/require-auth";

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { registerRequestSchema } from "@togu/schemas";
+import { registerRequestSchema } from "@fecho/schemas";
 import {
   createRegisterUserUseCase,
   EmailAlreadyRegisteredError,

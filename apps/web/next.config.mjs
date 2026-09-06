@@ -18,7 +18,7 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["@togu/design-system"],
+  transpilePackages: ["@fecho/design-system"],
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },

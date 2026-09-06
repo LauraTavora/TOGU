@@ -1,4 +1,4 @@
-# TOGU — Roadmap
+# Fechô — Roadmap
 
 ## MVP — v1
 Autenticação, calendário, eventos, Soft Hold, usuários, amigos, Circles, disponibilidade, solicitações (enviar/aceitar/negar/reagendar), Priority Engine, notificações, web responsiva, mobile base.

@@ -1,9 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Card, EmptyState, Skeleton, cn } from "@togu/design-system";
-import type { StatusKind } from "@togu/design-system";
-import { ApiError } from "@togu/sdk";
+import { Card, EmptyState, Skeleton, cn } from "@fecho/design-system";
+import type { StatusKind } from "@fecho/design-system";
+import { ApiError } from "@fecho/sdk";
 import { useAuth } from "@/client/auth/auth-provider";
 import { RequestCard } from "@/client/meeting-requests/request-card";
 import {

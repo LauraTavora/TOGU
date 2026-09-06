@@ -1,4 +1,4 @@
-import { prisma } from "@togu/database";
+import { prisma } from "@fecho/database";
 import { CheckAvailabilityUseCase } from "../application/check-availability.use-case";
 import { PrismaAvailabilityRepository } from "../adapters/prisma-availability-repository";
 

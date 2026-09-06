@@ -1,4 +1,4 @@
-import { prisma } from "@togu/database";
+import { prisma } from "@fecho/database";
 import { CreateCircleUseCase } from "../application/create-circle.use-case";
 import { ListCirclesUseCase } from "../application/list-circles.use-case";
 import { RenameCircleUseCase } from "../application/rename-circle.use-case";

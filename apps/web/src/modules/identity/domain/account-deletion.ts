@@ -9,5 +9,5 @@ export function computeScheduledDeletionAt(requestedAt: Date): Date {
 }
 
 export function anonymizedEmailFor(userId: string): string {
-  return `deleted-${userId}@togu.invalid`;
+  return `deleted-${userId}@fecho.invalid`;
 }

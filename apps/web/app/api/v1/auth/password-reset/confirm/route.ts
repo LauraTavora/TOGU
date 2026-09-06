@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { resetPasswordSchema } from "@togu/schemas";
+import { resetPasswordSchema } from "@fecho/schemas";
 import {
   createResetPasswordUseCase,
   InvalidOrExpiredTokenError,

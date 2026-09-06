@@ -1,4 +1,4 @@
-import { prisma } from "@togu/database";
+import { prisma } from "@fecho/database";
 import { SetPriorityRuleUseCase } from "../application/set-priority-rule.use-case";
 import { RemovePriorityRuleUseCase } from "../application/remove-priority-rule.use-case";
 import { ListPriorityRulesUseCase } from "../application/list-priority-rules.use-case";

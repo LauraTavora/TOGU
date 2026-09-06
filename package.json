@@ -1,8 +1,8 @@
 {
-  "name": "togu",
+  "name": "fecho",
   "version": "1.0.0",
   "private": true,
-  "description": "TOGU — plataforma social de organização de tempo, encontros e experiências.",
+  "description": "Fechô — plataforma social de organização de tempo, encontros e experiências.",
   "workspaces": [
     "apps/*",
     "packages/*"

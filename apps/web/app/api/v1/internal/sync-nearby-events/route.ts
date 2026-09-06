@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { syncNearbyEventsSchema } from "@togu/schemas";
+import { syncNearbyEventsSchema } from "@fecho/schemas";
 import { createSyncNearbyEventsUseCase } from "@/modules/discovery";
 import { apiError } from "@/shared/http/api-error";
 

@@ -1,4 +1,4 @@
-# TOGU — Strategy
+# Fechô — Strategy
 
 ## Problema
 Coordenar tempo com outras pessoas é lento, disperso entre apps de mensagem e calendário, e não respeita prioridades sociais nem privacidade granular.
@@ -30,7 +30,7 @@ Ver `PRODUCT.md` seção 3. Foco inicial: pessoas de 20–45 anos, vida social a
 ## Métricas
 
 ### North Star Metric
-**Encontros confirmados através do TOGU por usuário ativo (mensal).**
+**Encontros confirmados através do Fechô por usuário ativo (mensal).**
 
 ### Métricas secundárias
 - Solicitações enviadas por usuário ativo.

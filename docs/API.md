@@ -1,4 +1,4 @@
-# TOGU — API
+# Fechô — API
 
 API versionada sob `/api/v1/`. Route Handlers atuam apenas como adapters de entrada — nenhuma regra de negócio vive no endpoint; toda lógica é delegada a casos de uso da camada `application`.
 

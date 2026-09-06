@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requestPasswordResetSchema } from "@togu/schemas";
+import { requestPasswordResetSchema } from "@fecho/schemas";
 import { createRequestPasswordResetUseCase } from "@/modules/identity";
 import { apiError } from "@/shared/http/api-error";
 import { enforceRateLimit, getClientIp } from "@/shared/rate-limit";

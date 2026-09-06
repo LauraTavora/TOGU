@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 import { isEventCategory } from "../domain/event-category";
 import type { NearbyEvent } from "../domain/nearby-event";
 import type {

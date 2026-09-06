@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requestAccountDeletionSchema } from "@togu/schemas";
+import { requestAccountDeletionSchema } from "@fecho/schemas";
 import {
   createCancelAccountDeletionUseCase,
   createGetAccountDeletionStatusUseCase,

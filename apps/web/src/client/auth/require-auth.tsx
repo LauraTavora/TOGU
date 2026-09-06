@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { Skeleton } from "@togu/design-system";
+import { Skeleton } from "@fecho/design-system";
 import { useAuth } from "./auth-provider";
 
 /** Envolve páginas privadas: redireciona para /login se não autenticado. */

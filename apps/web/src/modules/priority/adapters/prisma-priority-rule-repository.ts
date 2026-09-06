@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 import type { PriorityLevel } from "../domain/priority-level";
 import type { PriorityRule, PriorityTargetType } from "../domain/priority-rule";
 import type { PriorityRuleRepository } from "../ports/priority-rule-repository";

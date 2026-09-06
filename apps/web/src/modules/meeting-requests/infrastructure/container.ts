@@ -1,4 +1,4 @@
-import { prisma } from "@togu/database";
+import { prisma } from "@fecho/database";
 import { getOutboxRepository } from "@/shared/outbox";
 import { getAuditLogger } from "@/shared/audit";
 import { CreateMeetingRequestUseCase } from "../application/create-meeting-request.use-case";

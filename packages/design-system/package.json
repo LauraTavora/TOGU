@@ -1,5 +1,5 @@
 {
-  "name": "@togu/design-system",
+  "name": "@fecho/design-system",
   "version": "0.1.0",
   "private": true,
   "main": "src/index.ts",

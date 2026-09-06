@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { PrismaClient } from "@togu/database";
+import type { PrismaClient } from "@fecho/database";
 import type { Event } from "../domain/event";
 import type { CreateEventInput, EventRepository, UpdateEventInput } from "../ports/event-repository";
 

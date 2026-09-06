@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Button, Card, EmptyState, Skeleton } from "@togu/design-system";
-import { ApiError } from "@togu/sdk";
+import { Button, Card, EmptyState, Skeleton } from "@fecho/design-system";
+import { ApiError } from "@fecho/sdk";
 import { useAuth } from "@/client/auth/auth-provider";
 import { formatNotificationMessage } from "@/client/notifications/format";
 import { formatRelativeTime } from "@/client/notifications/format-relative-time";

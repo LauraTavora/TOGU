@@ -1,4 +1,4 @@
-import type { PrismaClient, Prisma } from "@togu/database";
+import type { PrismaClient, Prisma } from "@fecho/database";
 import type { Notification } from "../domain/notification";
 import type { CreateNotificationInput, NotificationRepository } from "../ports/notification-repository";
 import { NotificationNotFoundError } from "../application/errors";

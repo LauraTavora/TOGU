@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
-import { Button, Dialog, Input } from "@togu/design-system";
+import { Button, Dialog, Input } from "@fecho/design-system";
 
 export interface AccountDeletionDialogProps {
   open: boolean;
