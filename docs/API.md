@@ -18,11 +18,12 @@ POST /api/v1/auth/login
 POST /api/v1/auth/logout
 POST /api/v1/auth/refresh
 POST /api/v1/auth/verify-email
+POST /api/v1/auth/resend-verification
 POST /api/v1/auth/password-reset/request
 POST /api/v1/auth/password-reset/confirm
 GET  /api/v1/auth/me
 ```
-Detalhamento da estratégia (JWT de acesso + refresh token opaco rotativo) em `docs/adr/ADR-006-authentication-strategy.md`.
+Detalhamento da estratégia (JWT de acesso + refresh token opaco rotativo) em `docs/adr/ADR-006-authentication-strategy.md`. `login` exige e-mail verificado — retorna `403 email_not_verified` caso contrário (ver `ADR-025`); `resend-verification` reenvia o e-mail de verificação (mesmo padrão anti-enumeration de `password-reset/request`, sempre `200`).
 
 ### Solicitações de encontro (módulo `meeting-requests`)
 ```text

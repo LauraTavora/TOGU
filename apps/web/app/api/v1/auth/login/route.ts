@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { loginRequestSchema } from "@togu/schemas";
-import { createLoginUseCase, InvalidCredentialsError } from "@/modules/identity";
+import { createLoginUseCase, EmailNotVerifiedError, InvalidCredentialsError } from "@/modules/identity";
 import { apiError } from "@/shared/http/api-error";
 import { setRefreshCookie } from "@/shared/http/refresh-cookie";
 import { enforceRateLimit, getClientIp } from "@/shared/rate-limit";
@@ -32,6 +32,9 @@ export async function POST(request: Request) {
   } catch (error) {
     if (error instanceof InvalidCredentialsError) {
       return apiError(401, "invalid_credentials", error.message);
+    }
+    if (error instanceof EmailNotVerifiedError) {
+      return apiError(403, "email_not_verified", error.message);
     }
     throw error;
   }

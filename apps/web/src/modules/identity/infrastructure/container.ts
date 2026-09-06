@@ -5,6 +5,7 @@ import { LoginUseCase } from "../application/login.use-case";
 import { LogoutUseCase } from "../application/logout.use-case";
 import { RefreshSessionUseCase } from "../application/refresh-session.use-case";
 import { RequestPasswordResetUseCase } from "../application/request-password-reset.use-case";
+import { ResendVerificationEmailUseCase } from "../application/resend-verification-email.use-case";
 import { ResetPasswordUseCase } from "../application/reset-password.use-case";
 import { GetUsersPublicInfoUseCase } from "../application/get-users-public-info.use-case";
 import { FindUserByEmailUseCase } from "../application/find-user-by-email.use-case";
@@ -106,6 +107,15 @@ export function createRefreshSessionUseCase(): RefreshSessionUseCase {
 
 export function createRequestPasswordResetUseCase(): RequestPasswordResetUseCase {
   return new RequestPasswordResetUseCase(
+    userRepository,
+    authTokenRepository,
+    tokenGenerator,
+    emailProvider,
+  );
+}
+
+export function createResendVerificationEmailUseCase(): ResendVerificationEmailUseCase {
+  return new ResendVerificationEmailUseCase(
     userRepository,
     authTokenRepository,
     tokenGenerator,

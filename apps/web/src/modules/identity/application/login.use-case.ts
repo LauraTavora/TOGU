@@ -14,6 +14,12 @@ export class InvalidCredentialsError extends Error {
   }
 }
 
+export class EmailNotVerifiedError extends Error {
+  constructor() {
+    super("Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada.");
+  }
+}
+
 export interface LoginInput {
   email: string;
   rawPassword: string;
@@ -44,6 +50,12 @@ export class LoginUseCase {
     const passwordMatches = await this.passwordHasher.verify(input.rawPassword, user.passwordHash);
     if (!passwordMatches) {
       throw new InvalidCredentialsError();
+    }
+
+    // Verificado depois da senha (não antes): revelar "e-mail não verificado"
+    // já pressupõe que a senha está certa, então não ajuda enumeração.
+    if (!user.emailVerifiedAt) {
+      throw new EmailNotVerifiedError();
     }
 
     const refresh = this.tokenGenerator.generate();

@@ -8,6 +8,7 @@ export {
   createResetPasswordUseCase,
   createGetUsersPublicInfoUseCase,
   createFindUserByEmailUseCase,
+  createResendVerificationEmailUseCase,
   createRequestAccountDeletionUseCase,
   createCancelAccountDeletionUseCase,
   createGetAccountDeletionStatusUseCase,
@@ -18,7 +19,7 @@ export type { AccountDeletionStatus } from "./application/get-account-deletion-s
 
 export { EmailAlreadyRegisteredError } from "./application/register-user.use-case";
 export { InvalidOrExpiredTokenError } from "./application/verify-email.use-case";
-export { InvalidCredentialsError } from "./application/login.use-case";
+export { InvalidCredentialsError, EmailNotVerifiedError } from "./application/login.use-case";
 export { InvalidSessionError } from "./application/refresh-session.use-case";
 export { IncorrectPasswordError } from "./application/request-account-deletion.use-case";
 export { InvalidEmailError } from "./domain/email";

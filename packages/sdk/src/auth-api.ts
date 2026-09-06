@@ -42,6 +42,12 @@ export function createAuthApi(client: HttpClient) {
         body: JSON.stringify({ token }),
       }),
 
+    resendVerification: (email: string) =>
+      client.request<{ ok: true }>("/api/v1/auth/resend-verification", {
+        method: "POST",
+        body: JSON.stringify({ email }),
+      }),
+
     requestPasswordReset: (email: string) =>
       client.request<{ ok: true }>("/api/v1/auth/password-reset/request", {
         method: "POST",
