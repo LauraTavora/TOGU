@@ -12,7 +12,7 @@ Production
 
 Cada PR gera Preview automático (Vercel); Production só recebe deploy após pipeline de CI completo (`TESTING.md`) aprovado.
 
-**Status real:** o pipeline de CI (GitHub Actions, `.github/workflows/ci.yml` — typecheck, lint, testes, build em todo push/PR para `main`) existe desde `ADR-021`. Desde `ADR-024`, o projeto está de fato no ar: `https://web-psi-one-95.vercel.app`, com o repositório GitHub conectado (Preview automático por PR, deploy de Production automático em push para `main`), banco Neon real provisionado e migrado. `UPSTASH_REDIS_REST_URL`/`TOKEN` e `EMAIL_PROVIDER_API_KEY`/`EMAIL_FROM` (ADR-023) ainda não foram configurados nesse ambiente Vercel — rate limiting e e-mail transacional continuam nos fallbacks de desenvolvimento em produção até isso ser feito.
+**Status real:** o pipeline de CI (GitHub Actions, `.github/workflows/ci.yml` — typecheck, lint, testes, build em todo push/PR para `main`) existe desde `ADR-021`. Desde `ADR-024`, o projeto está de fato no ar: `https://web-psi-one-95.vercel.app`, com o repositório GitHub conectado (Preview automático por PR, deploy de Production automático em push para `main`), banco Neon real provisionado e migrado. Desde `ADR-025`, rate limiting também usa Redis real em produção (Upstash, via `vercel integration add upstash/upstash-kv`) — verificado com tráfego real (11 tentativas de login confirmaram o `429` no limite certo). `EMAIL_PROVIDER_API_KEY`/`EMAIL_FROM` (Resend, ADR-023) continuam sem valor: a integração do Resend no Vercel exige um domínio verificado, que o produto ainda não tem — e-mail transacional segue no fallback de log até isso ser resolvido.
 
 ## Banco de dados
 - Desenvolvimento: PostgreSQL local.

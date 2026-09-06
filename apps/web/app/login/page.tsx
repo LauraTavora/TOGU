@@ -11,26 +11,44 @@ import { GuestOnly } from "@/client/auth/require-auth";
 import { AuthLayout } from "@/client/auth/auth-layout";
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login, authApi } = useAuth();
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [needsVerification, setNeedsVerification] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResending, setIsResending] = useState(false);
+  const [resent, setResent] = useState(false);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     setError(null);
+    setNeedsVerification(false);
+    setResent(false);
     setIsSubmitting(true);
     try {
       await login(email, password);
       router.replace("/hoje");
     } catch (err) {
+      if (err instanceof ApiError && err.code === "email_not_verified") {
+        setNeedsVerification(true);
+      }
       setError(
         err instanceof ApiError ? err.message : "Não foi possível entrar. Tente novamente.",
       );
     } finally {
       setIsSubmitting(false);
+    }
+  }
+
+  async function handleResendVerification() {
+    setIsResending(true);
+    try {
+      await authApi.resendVerification(email);
+    } finally {
+      setIsResending(false);
+      setResent(true);
     }
   }
 
@@ -61,6 +79,26 @@ export default function LoginPage() {
             <p role="alert" className="text-sm text-danger-conflict">
               {error}
             </p>
+          )}
+
+          {needsVerification && (
+            <div className="flex flex-col gap-2 rounded-card bg-surface-hover p-3">
+              {resent ? (
+                <p className="text-sm text-text-secondary">
+                  Se a conta existir e ainda não estiver verificada, reenviamos o e-mail.
+                </p>
+              ) : (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleResendVerification}
+                  disabled={isResending || !email}
+                >
+                  {isResending ? "Reenviando..." : "Reenviar e-mail de verificação"}
+                </Button>
+              )}
+            </div>
           )}
 
           <Button type="submit" fullWidth disabled={isSubmitting}>

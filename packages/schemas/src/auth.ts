@@ -22,6 +22,11 @@ export const requestPasswordResetSchema = z.object({
 });
 export type RequestPasswordResetRequest = z.infer<typeof requestPasswordResetSchema>;
 
+export const resendVerificationEmailSchema = z.object({
+  email: z.string().email(),
+});
+export type ResendVerificationEmailRequest = z.infer<typeof resendVerificationEmailSchema>;
+
 export const resetPasswordSchema = z.object({
   token: z.string().min(1),
   password: z.string().min(8).max(128),

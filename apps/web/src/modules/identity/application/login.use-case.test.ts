@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { LoginUseCase, InvalidCredentialsError } from "./login.use-case";
+import { LoginUseCase, EmailNotVerifiedError, InvalidCredentialsError } from "./login.use-case";
 import { InMemoryUserRepository } from "../adapters/in-memory-user-repository";
 import { InMemorySessionRepository } from "../adapters/in-memory-session-repository";
 import { BcryptPasswordHasher } from "../adapters/bcrypt-password-hasher";
@@ -21,6 +21,7 @@ async function buildScenario() {
     email: "ana@example.com",
     passwordHash,
   });
+  await userRepository.markEmailVerified(user.id, new Date());
 
   const useCase = new LoginUseCase(
     userRepository,
@@ -31,7 +32,7 @@ async function buildScenario() {
     auditLogger,
   );
 
-  return { useCase, user, sessionRepository, accessTokenSigner, tokenGenerator, auditLogger };
+  return { useCase, user, userRepository, sessionRepository, accessTokenSigner, tokenGenerator, auditLogger };
 }
 
 describe("LoginUseCase", () => {
@@ -68,5 +69,20 @@ describe("LoginUseCase", () => {
     await expect(
       useCase.execute({ email: "outra@example.com", rawPassword: "Segura123" }),
     ).rejects.toThrow(InvalidCredentialsError);
+  });
+
+  it("bloqueia login de conta com e-mail ainda não verificado", async () => {
+    const { useCase, userRepository, auditLogger } = await buildScenario();
+    const passwordHasher = new BcryptPasswordHasher();
+    const unverified = await userRepository.create({
+      id: "user-2",
+      email: "bruno@example.com",
+      passwordHash: await passwordHasher.hash("OutraSenha123"),
+    });
+
+    await expect(
+      useCase.execute({ email: unverified.email, rawPassword: "OutraSenha123" }),
+    ).rejects.toThrow(EmailNotVerifiedError);
+    expect(auditLogger.entries).toHaveLength(0);
   });
 });
